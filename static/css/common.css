@@ -1,0 +1,99 @@
+:root{
+  /*Color*/
+  --color-point-red : #ee2239;
+  --color-point-blue : #00a0e9;
+  --color-point-deepblue : #0068b7;
+  --color-orange : #f68d3c;
+  --color-white : #fff;
+  --color-small-grey : #cccccc;
+  --color-light-grey : #878787;
+  --color-medium-grey : #505050;
+  --color-grey : #666;
+  --color-black : #333;
+  --color-deepblack : #000;
+  --border-grey : #ddd;
+  --border-grey-transparency : rgba(221,221,221, 0.35);
+  --background-after : #bfcbdc;
+  --footer-background : #111;
+
+  /*Font weight*/
+  --weight-bold : 700;
+  --weight-semi-bold : 600;
+  --weight-medium : 500;
+  --weight-regular : 400;
+  --weight-light : 300;
+  --weight-thin : 100;
+
+  /* Font family */
+  --font-batang : 'GyeonggiBatang',sans-serif;
+  --font-amiri : 'Amiri', serif;
+  --font-lato : 'Lato', sans-serif;
+  --font-gmarketB : 'GmarketSansBold', sans-serif;
+
+  /*animation duration*/
+  --animation-duration : all 0.3s ease;
+  --animation-late-duration : all 1s ease;
+}
+
+
+.inner {width: 1400px; margin: 0 auto;}
+/* header */
+header {position: fixed; left: 0; top:0; z-index: 100; width: 100%; height:  auto;}
+header .inner {max-width : 100%; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px;}
+header h1 {width: 80px; height:100%; }
+header h1 a {display: block; width: 100%; height: 100%; position: relative;}
+header h1 a img {width: 100%; height: auto; position: absolute; left: 0; top:50%; transform:  translateY(-50%);}
+header h1 a img.hov {display: none;}
+header .menu_bt{width: 30px; height: auto; cursor: pointer;}
+header .menu_bt ul{width: 100%; height: auto; position: relative;}
+header .menu_bt ul li{width: 100%; height: auto; transition: all ease 0.3s;}
+header .menu_bt ul li:nth-child(2){display: flex; justify-content: space-between; margin: 6px 0;}
+header .menu_bt ul li span{width: 100%; height: 4px; display: block; background-color: #fff; border-radius: 2px;}
+header.sub .menu_bt ul li span{background-color: #fff;}
+header.fixed .menu_bt ul li span{background-color: #fff;}
+header.sub .menu_bt.on ul li span{background-color: #fff;}
+header .menu_bt ul li:nth-child(2) span:first-child{background-color: #2251ff; width: 10px;}
+header .menu_bt ul li:nth-child(2) span:last-child{width: 18px;}
+header .menu_bt.on ul li:nth-child(1){width: 0; height: 0; margin: 0; opacity: 0;}
+header .menu_bt.on ul li:nth-child(2){transform: rotate(45deg); margin: 0;}
+header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate(
+-45deg);}
+
+
+.main_wrap {
+  width: 100%; height: auto; position: relative;
+}
+
+.main_wrap video {
+  width: 100%;
+}
+
+.main_wrap .img_wrap {
+  width: 100%; height: 100%; opacity: 1;
+   transition: 0.5s all;
+  position: absolute; left: 0; top:0;
+  background: url("https://movie-phinf.pstatic.net/20220302_71/1646183071913TYi4c_JPEG/movie_image.jpg?type=m665_443_2") no-repeat center / cover;
+}
+.main_wrap .img_wrap img {display: none;}
+
+.main_wrap:hover .img_wrap {
+  opacity: 0;
+}
+
+/* login */
+.login_wrap {
+  height: 500px; width: 420px; margin: 0 auto; margin-top: 180px;
+  border: 2px solid #fff; border-radius: 30px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center; align-items: center;
+}
+.login_wrap  .login_box {
+  display: flex;
+  justify-content: center; align-items: center;
+}
+.login_wrap ul {height: 100px; display: flex; flex-flow: column nowrap; justify-content: space-between; padding-right: 15px;}
+.login_wrap ul li {}
+.login_wrap ul li:first-child  {}
+.login_wrap input {padding: 8px 12px; font-size: 16px;  border: 1px solid #fff; background: none; color: #fff;}
+.login_wrap button {font-size: 18px; text-align:center; background-color: #fff; height: 100px; width :100px}

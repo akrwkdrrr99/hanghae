@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="login_wrap">
+    <div class="login_box">
+        <ul>
+            <li><input type="text" id="input_id" placeholder="id"/></li>
+            <li><input type="password" id="input_pw" placeholder="password" /></li>
+        </ul>
+        <button onclick="requestLogin()">로그인</button>
+    </div>
+    <div class="login_plus">
+        <div class="lp_left">
+            <label for="lp_chk">
+                <input name="lp_chk"  id="lp_chk" type="checkbox" />
+                <span>아이디 저장</span>
+            </label>
+        </div>
+        <div class="lp_right">
+            <a href="#" id="member_btn">회원가입</a>
+            <a href="#" id="pw_find_btn">비밀번호찾기  </a>
+        </div>
+    </div>
+    <script>
+        // 서버에 요청할 작업을 상수로 정의해서 상수값과 같이 요청합니다.
+        const GET_REQUEST_LOGIN = 'getRequestLogin'
+
+        function requestLogin(){
+            $.ajax({
+                type: "POST",
+                url: "/api",
+                data: {
+                    reqType: GET_REQUEST_LOGIN, // 서버에 요청할 작업
+                    userId: $('#input_id').val(),
+                    userPw: $('#input_pw').val()
+                },
+                success: function (response) {
+                    let resultCode = response['code']
+                    if (resultCode < 0) {
+                        //처리코드가 0인경우 정상, 0보다 작은 경우 오류로 약속합니다.
+                        //오류인 경우 서버에서 내려주는 메시지 그대로 보여줍니다.
+                        alert(response['msg'])
+                    } else {
+                        // 정상코드일 경우 여기에 코드를 작성합니다.
+                        $.cookie('mytoken', response['token'])
+                        alert('로그인 성공!')
+                        window.location.href = '/'
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+{% endblock %}
