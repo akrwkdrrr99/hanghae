@@ -13,15 +13,16 @@ SECRET_KEY = "MOVIEW"
 @app.route('/')
 def home():
     receive_token = request.cookies.get('mytoken')
-    return render_template('index.html')
-    try:
-        payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({'id':payload['id']})
-        return render_template('index.html')
-    except jwt.ExpiredSignatureError: # 예외처리 스타트
-        return redirect(url_for('index', msg="로그인 시간 만료"))
-    except jwt.exceptions.DecodeError:
-        return redirect(url_for('index', msg="로그인 정보 x"))
+    # return render_template('index.html')
+    return render_template('board.html')
+    # try:
+    #     payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
+    #     user_info = db.users.find_one({'id':payload['id']})
+    #     return render_template('index.html')
+    # except jwt.ExpiredSignatureError: # 예외처리 스타트
+    #     return redirect(url_for('index', msg="로그인 시간 만료"))
+    # except jwt.exceptions.DecodeError:
+    #     return redirect(url_for('index', msg="로그인 정보 x"))
 
 @app.route('/login')
 def login():

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <title>웹사이트 제목</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+
+        .mytitle {
+            width: 100%;
+            height: 250px;
+
+            background-image: url('https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg');
+            background-position: center;
+            background-size: cover;
+
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mytitle > button {
+            width: 400px;
+            height: 250px;
+
+            font-size: 45pt;
+
+            background-color: transparent;
+            color: white;
+
+            /* border-radius: 50px; */
+            border: 1px solid transparent;
+        }
+
+        .mytitle > button:hover {
+            /* border: 2px solid white; */
+            color: red;
+        }
+
+        .title_h3{
+            float: left;
+            margin-top: 11px;
+            margin-left: 10px;
+            
+        }
+
+        .arrange_list{
+            width: 110px;
+            float: right;
+            margin-top: 10px;
+            margin-right: 10px;
+
+        }
+
+        .write_button{
+            width: 100px;
+            float: right;
+            margin-right: 10px;
+        }
+
+        .pagination{
+            width: 100%;
+            margin-top: 16px;
+
+            display: flex;
+            flex-direction:row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        th, td {
+            text-align: center;
+        }
+
+        .serchcontents{
+            width: 100%;
+
+            display: flex;
+            flex-direction:row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .serch_inputform{
+            margin-top: 16px;
+            margin-left: 10px;
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function () {
+            listing();
+        });
+
+        function listing() {
+            $.ajax({
+                type: 'GET',
+                url: '/movie',
+                data: {},
+                success: function (response) {
+                }
+            })
+        }
+
+        function posting() {
+            let url = $('#url').val()
+            let star = $('#star').val()
+            let comment = $('#comment').val()
+
+            $.ajax({
+                type: 'POST',
+                url: '/movie',
+                data: {url_give: url, star_give: star, comment_give:comment},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.location.reload()
+                }
+            });
+        }
+
+        function open_box() {
+            $('#post-box').show()
+        }
+    </script>
+</head>
+
+<body>
+<div class="mytitle">
+    <button onclick="open_box()">웹사이트 제목 /뒤에는 동영상 재생</button>
+</div>
+
+<div class="title_h3">
+    <h3>영화 추천 게시판</h3>
+</div>
+
+<div class="arrange_list">
+    <select class="form-select" aria-label="Default select example">
+        <option selected>정렬방법</option>
+        <option value="1">별점 순</option>
+        <option value="2">조회 순</option>
+        <option value="3">추천 순</option>
+    </select>
+</div>
+
+
+
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">글 번호</th>
+        <th scope="col">영화제목</th>
+        <th scope="col">감독</th>
+        <th scope="col">개봉일</th>
+        <th scope="col">추천수</th>
+        <th scope="col">평균별점</th>
+        <th scope="col">조회수</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>@mdo</td>
+        <td>@개봉일</td>
+        <td>@추천수</td>
+        <td>@평균별점</td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>@fat</td>
+        <td>@fat</td>
+        <td>@fat</td>
+        <td>@fat</td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <!-- <td colspan="3">Larry the Bird</td> -->
+        <td >@twitter</td>
+        <td>@twitter</td>
+        <td>@twitter</td>
+        <td>@twitter</td>
+        <td>@twitter</td>
+        <td>@twitter</td>
+      </tr>
+    </tbody>
+</table>
+
+<div class="write_button">
+    <button type="button" class="btn btn-outline-danger">글쓰기</button>
+</div>
+
+<div class="pagination">
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div class="serchcontents">
+    <div>
+        <select class="form-select" aria-label="Default select example">
+            <option selected>검색조건</option>
+            <option value="1">영화제목</option>
+            <option value="2">감독</option>
+            <option value="3">출연배우</option>
+        </select>
+    </div>
+    <div class="serch_inputform">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="검색어 입력" aria-label="검색어 입력" aria-describedby="button-addon2">
+            <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+</html>
+
+{% extends "layout.html" %}
+{% block content %}
+{% endblock %}
