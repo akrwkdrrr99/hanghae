@@ -13,7 +13,7 @@ SECRET_KEY = "MOVIEW"
 @app.route('/')
 def home():
     receive_token = request.cookies.get('mytoken')
-    return render_template('index.html')
+    print(receive_token)
     try:
         payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({'id':payload['id']})
@@ -27,14 +27,23 @@ def home():
 def login():
     return render_template('login.html')
 
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+@app.route('/mem_area')
+def memup():
+    return render_template('mem_area.html')
+
 @app.route('/api', methods=["POST"])
 def api():
     receive_reqtype = request.form['reqType']
+
     if receive_reqtype == 'getRequestLogin':
         receive_userid = request.form['userId']
         receive_userpw = request.form['userPw']
-
         result = db.users.find_one({'id': receive_userid, 'pw': receive_userpw})
+
         if result is not None:
             payload = {
                 'id': receive_userid,
@@ -42,10 +51,26 @@ def api():
             }
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
             return jsonify({'code': 0, 'msg': '정상입니다.', 'token': token})
+
         else:
             return jsonify({'code': -1, 'msg': 'id/pw가 일치하지 않습니다.'})
+    elif receive_reqtype == 'postRequestSignUp':
+        receive_userid = request.form['userId']
+        receive_userpw = request.form['userPw']
+        receive_username = request.form['userName']
+        receive_useremail = request.form['userEmail']
+        receive_userphone = request.form['userPhone']
+        doc = {
+            'userid': receive_userid
+            , 'userpw': receive_userpw
+            , 'username': receive_username
+            , 'useremail': receive_useremail
+            , 'userphone': receive_userphone
+        }
+        db.users.insert_one(doc)
+        return jsonify({'code': 0, 'msg': '회원가입 완료'})
     else:
-        return jsonify({'code': -99, 'msg': '정의되지 않은 요청코드입니다.'})
+        return jsonify({'code': -99, 'msg': '정의되지 않은 요청코드'})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
