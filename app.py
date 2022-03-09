@@ -1,7 +1,7 @@
 import jwt
 import datetime
 
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 app = Flask(__name__)
 
 from pymongo import MongoClient
@@ -13,7 +13,7 @@ SECRET_KEY = "MOVIEW"
 @app.route('/')
 def home():
     receive_token = request.cookies.get('mytoken')
-    print(receive_token)
+
     try:
         payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({'id':payload['id']})
@@ -27,13 +27,23 @@ def home():
 def login():
     return render_template('login.html')
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    receive_token = request.cookies.get('mytoken')
+    print(receive_token)
+    user_list = list(db.bucket.find({}, {'_id': False}))
+#    session.pop('userid', None)
+    session.clear()
+    return redirect('/')
+
+
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
 
-@app.route('/mem_area')
+@app.route('/memaree')
 def memup():
-    return render_template('mem_area.html')
+    return render_template('memaree.html')
 
 @app.route('/api', methods=["POST"])
 def api():

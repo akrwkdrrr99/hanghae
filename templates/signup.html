@@ -1,20 +1,139 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="join_wrap">
-    <ul class="join">
-        <li><label for="id">아이디<i>*</i></label><input type="text" id="input_id" name="input_id" maxlength="12"><button onclick="duplicateCheck()">중복확인</button></li>
-        <li><label for="input_pw">패스워드<i>*</i></label><input type="password" id="input_pw" name="input_pw" maxlength="18"></li>
-        <li><label for="input_chkpw">패스워드 확인<i>*</i></label><input type="password" name="input_chkpw" id="input_chkpw" maxlength="18"></li>
-        <li><label for="input_name">이름<i>*</i></label><input type="text" id="input_name" name="input_name" maxlength="6"></li>
-        <li><label for="input_email">이메일주소</label><input type="text" id="input_email" name="input_email"></li>
-        <li><label for="input_phone">휴대폰번호</label><input type="text" id="input_phone" name="input_phone"></li>
-    <ul>
-    <div class="btn_wrap">
-        <a href="javascript:history.back()" class="btn_type2">이전으로</a>
-        <button onclick="signupUser()" class="btn_type3">회원가입</button>
-    </div>
+    <form name="fregisterform" id="fregisterform" autocomplete="off" method="post" onsubmit="return fregisterform_submit(this);" action="#" autocomplete="off">
+        <input type="hidden" name="pt_id" value="admin">
+        <input type="hidden" name="token" value="receive_token">
+        <ul class="join">
+            <li><label for="id">아이디<i>*</i></label><input type="text" id="input_id" name="input_id" maxlength="12"><button onclick="id_chk_popup()">중복확인</button></li>
+            <li><label for="input_pw">패스워드<i>*</i></label><input type="password" id="input_pw" name="input_pw" maxlength="18"></li>
+            <li><label for="input_chkpw">패스워드 확인<i>*</i></label><input type="password" name="input_chkpw" id="input_chkpw" maxlength="18"></li>
+            <li><label for="input_name">이름<i>*</i></label><input type="text" id="input_name" name="input_name" maxlength="6"></li>
+            <li><label for="input_email">이메일주소</label><input type="text" id="input_email" name="input_email"></li>
+            <li><label for="input_phone">휴대폰번호</label><input type="text" id="input_phone" name="input_phone"></li>
+        <ul>
+        <div class="btn_wrap">
+            <a href="javascript:history.back()" class="btn_type2">이전으로</a>
+            <button onclick="form_check()" class="btn_type3" id="btn_submit">회원가입</button>
+        </div>
+    </form>
     <script>
+    // 폼구동
+    function form_check(check_type){
+        var f		=	document.fregisterform;
+        var msg	=	"";
 
+        //패스워드 체크
+        if(check_type == "pass"){
+            var msg		=	"사용하셔도 좋은 패스워드 입니다.";
+
+            // 패스워드 검사
+            if(f.input_pw.value.length < 8) {
+                msg	=	"비밀번호를 8글자 이상 입력하십시오.";
+                f.input_pw.focus();
+            }
+
+            if(f.input_pw.value != f.input_chkpw.value) {
+                msg	=	"비밀번호가 일치하지 않습니다.";
+                f.input_chkpw.focus();
+            }
+        }
+
+        //전화번호 체크
+        if(check_type == "phone"){
+            if($.trim($("input[name=input_phone]").val()) == "" ){
+                return;
+            }
+        }
+    }
+
+
+    function fregisterform_submit(f){
+        var mb_id = reg_mb_id_check(f.input_id.value);
+        if(mb_id) {
+            alert("'"+mb_id+"'은(는) 사용하실 수 없는 아이디입니다.");
+            f.input_id.focus();
+            return false;
+        }
+
+        // 회원아이디 검사
+        if(f.input_id.value.length < 3) {
+            alert("아이디를 3글자 이상 입력하십시오.");
+            f.input_id.focus();
+            return false;
+        }
+
+        // 패스워드 검사
+        if(f.input_pw.value.length < 4) {
+            alert("패스워드를 4글자 이상 입력하십시오.");
+            f.input_pw.focus();
+            return false;
+        }
+
+        if(f.input_pw.value != f.input_chkpw.value) {
+            alert("패스워드가 같지 않습니다.");
+            f.input_chkpw.focus();
+            return false;
+        }
+
+        if(f.input_pw.value.length > 0) {
+            if(f.input_chkpw.value.length < 4) {
+                alert("패스워드를 4글자 이상 입력하십시오.");
+                f.input_chkpw.focus();
+                return false;
+            }
+        }
+
+            // 사용할 수 없는 E-mail 도메인
+        var domain = prohibit_email_check(f.email.value);
+        if(domain) {
+            alert("'"+domain+"'은(는) 사용하실 수 없는 메일입니다.");
+            f.email.focus();
+            return false;
+        }
+
+
+        if(confirm("회원가입 하시겠습니까?") == false)
+            return false;
+
+        document.getElementById("btn_submit").disabled = "disabled";
+        return true;
+    }
+
+    // 회원아이디 검사
+    function reg_mb_id_check(mb_id)
+    {
+        mb_id = mb_id.toLowerCase();
+
+        var prohibit_mb_id = "admin,administrator,webmaster,sysop,manager,root,su,guest,www";
+        var s = prohibit_mb_id.split(",");
+
+        for(i=0; i<s.length; i++) {
+            if(s[i] == mb_id)
+                return mb_id;
+        }
+        return "";
+    }
+
+    // 금지 메일 도메인 검사
+    function prohibit_email_check(email)
+    {
+        email = email.toLowerCase();
+
+        var prohibit_email = "hanmail.net";
+        var s = prohibit_email.split(",");
+        var tmp = email.split("@");
+        var domain = tmp[tmp.length - 1]; // 메일 도메인만 얻는다
+
+        for(i=0; i<s.length; i++) {
+            if(s[i] == domain)
+                return domain;
+        }
+        return "";
+    }
+    </script>
+
+    <script>
         const POST_REQUEST_SIGNUP = 'postRequestSignUp'
 
         function duplicateCheck(){

@@ -35,16 +35,25 @@
                 <li><span></span></li>
               </ul>
             </div-->
+            {% if g.user %}
             <div class="login_btn">
                 <!-- 로그인 전 -->
-                <a href="/login">
-                    <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="로그인">
+                <a href="/mypage">
+                    <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="마이페이지">
                 </a>
                 <!-- 로그인 후 -->
                 <a href="/logout">
                     <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="로그아웃">
                 </a>
             </div>
+            {% else %}
+            <div class="login_btn">
+                <!-- 로그인 전 -->
+                <a href="/login">
+                    <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="로그인">
+                </a>
+            </div>
+            {% endif %}
         </div>
     </header>
     <div class="wrapper">

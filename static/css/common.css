@@ -120,7 +120,56 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 .join_wrap ul li input[type="text"], .join_wrap ul li input[type="password"], .join_wrap ul li select{height: 45px; border: 1px solid #dfdfdf; border-radius: 0; padding: 0 10px; font-size: 16px; font-weight: 400; color: #505050;}
 .join_wrap ul li input[type="text"]::placeholder{font-size: 14px;}
 
+.agree_wrap{width: 100%; height: auto; max-width: 1400px; margin:120px auto 0;}
+.agree_wrap .agree_all {display: flex; border-bottom: 1px solid #ddd; padding-bottom: 30px; font-size: 16px; color: var(--color-light-grey); margin-bottom: 30px; align-items: center;}
+.agree_wrap .agree_all input {margin-right: 5px;}
+.agree_wrap .agree{width: 100%; height: auto; margin-bottom: 80px;}
+.agree_wrap .agree .title{font-size: 20px; font-weight: 500; margin-bottom: 20px; position: relative; padding: 0 16px; color: #fff;}
+.agree_wrap .agree .title:after {content:''; display: block; width: 10px; height: 10px;  border-radius: 50%; position: absolute; top:50%; left: 0; transform: translateY(-50%); background-color: #fff;}
+.agree_wrap .agree .agree_box{width: 100%; height: 240px; border: 1px solid #dfdfdf; border-top: 2px solid var(--color-point-blue); overflow-y: scroll; padding: 50px; line-height: 1.5; background-color: #fff;}
+.agree_wrap .agree .agree_box h4{font-size: 18px; font-weight: 400;}
+.agree_wrap .agree .agree_box h5{font-size: 18px font-weight: 500; margin-bottom: 15px; margin-top: 27px;}
+.agree_wrap .agree .agree_box p, .agree_wrap .agree .agree_box li{font-size: 14px; font-weight: 300; color: #878787; padding-left: 10px;}
+.agree_wrap .agree .agree_box ol{padding-left: 0;}
+.agree_wrap .agree .agree_box ul{margin-bottom: 40px;}
+.agree_wrap .agree .agree_box li{margin-top: 5px;}
+.agree_wrap .agree .agree_check_box{width: 100%; height: auto; margin-top: 20px; display: flex; align-items: center; color: #fff; position: relative; z-index: 1;}
+.agree_wrap .agree .chk_group,
+.agree_wrap .agree_all .chk_group{position: relative;}
+.agree_wrap .agree .chk_group span,
+.agree_wrap .agree_all .chk_group span {position: absolute; z-index: 3; opacity: 0; width: 10px; height: 10px;  display: block; background-color: var(--color-point-blue); top: 50%; left: 50%; transform: translate(-50%, -50%); transition: 0.35s all;}
+.agree_wrap .agree .chk_group input:checked ~ span,
+.agree_wrap .agree_all .chk_group input:checked ~ span {opacity: 1;}
+.agree_wrap .agree .agree_check_box label,
+.agree_wrap .agree_all  label {margin-left: 7px;}
+.agree_wrap .agree .agree_check_box input,
+.agree_wrap .agree_all  input  {margin-right: 0;}
+.agree_wrap input { width: 16px; height: 16px; border: 1px solid #dfdfdf; display: block; cursor: pointer; margin-right: 10px; background-color: #fff; }
+
 .btn_wrap {margin: 40px auto 0; display: flex; justify-content: center; }
 .btn_wrap [class*="btn_t"] {width: 80px; height: 44px; line-height: 42px; text-align: center; border: 1px solid #fff;  color: #fff; background: none; margin: 0 8px; transition: 0.35s all;}
 .join_wrap [class*="btn_t"]:hover {background-color: #fff; color: #222;}
 
+
+/* popup_area */
+body.setof {overflow: hidden; height: 100%;}
+.popup_area { width: 100%; height: 100vh; position: fixed; left: 0; top: 0;  background-color: rgba(0,0,0,0.8); opacity: 0;  z-index: -1; transition: 0.75s all 0.5s; display: flex; justify-content: center; align-items: center; }
+.popup_area.show {opacity: 1; z-index: 200;}
+.pop_inner {display: flex; justify-content: center; align-items: center; position: relative; width: 90%; max-width: 800px; height :auto; max-height: 600px; padding-top: 40px;}
+.pop_inner .p_close {display: block; position: absolute; top:0; right: -40px; width :36px; height: 38px; background:url('../img/popup_close.png') no-repeat center / cover;}
+.pop_inner .pop_up_box {width: 100%; height: auto; min-height: 350px; overflow-x: hidden; overflow-y: scroll; background-color: #fff; padding: 59px 15px; border: 1px solid #000; box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.3);}
+.pop_inner .pop_up_box > div  {padding: 0 44px; height: 100%; display:none;}
+.pop_inner .pop_up_box > div::-webkit-scrollbar,
+.qna_frm .scr_p_box::-webkit-scrollbar {width: 3px; display:block;}
+.pop_inner .pop_up_box > div::-webkit-scrollbar-track,
+.qna_frm .scr_p_box::-webkit-scrollbar-track {background-color: #dfdfdf; display:block; border-radius: 2px;}
+ .pop_inner .pop_up_box > div::-webkit-scrollbar-thumb,
+.qna_frm .scr_p_box::-webkit-scrollbar-thumb {background: #3080e2; border-radius: 2px;}
+
+ .pop_inner .pop_up_box form li {margin-bottom: 10px;}
+ .pop_inner .pop_up_box form input {display: block; width :100%; height: 48px;  font-size: 16px; padding: 0px 12px; line-height: 46px}
+ .pop_inner .pop_up_box form .certificate_code {display: flex;}
+ .pop_inner .pop_up_box form .certificate_code input {width: calc(100% - 82px); margin-right: 12px;}
+ .pop_inner .pop_up_box form .certificate_code button {display: block; width: 70px; line-height: 48px; background-color: #222; color: #fff;}
+ .pop_inner .pop_up_box form .check {margin-top: 22px; text-align: center;}
+ .pop_inner .pop_up_box form .check button {width: 120px; height: 48px; line-height: 46px; border: 1px solid #222;}
