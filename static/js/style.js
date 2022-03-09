@@ -186,3 +186,27 @@ function topFunction() {
   document.body.scrollTop = 0; // For Safari
   document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
+
+function serch_btn() {
+    let condition = $('#serch_condition').val()
+    let serch_text = $('#serch_text_input_box').val()
+
+    if (condition == "검색조건") {
+        alert("검색조건을 설정하세요.")
+        return
+    }
+
+    if (serch_text == "") {
+        alert("검색어를 입력하세요.")
+        return
+    }
+
+    $.ajax({
+        type: 'GET',
+        url: `/board/${condition}/${serch_text}/0`,
+        data: {},
+        success: function (response) {
+            window.location.href = `/board/${condition}/${serch_text}/1`
+        }
+    });
+}

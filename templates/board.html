@@ -78,7 +78,7 @@
 
     <div class="serchcontents">
         <div>
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select" aria-label="Default select example" id="serch_condition">
                 <option selected>검색조건</option>
                 <option value="1">영화제목</option>
                 <option value="2">감독</option>
@@ -88,8 +88,8 @@
         <div class="serch_inputform">
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="검색어 입력" aria-label="검색어 입력"
-                    aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">검색</button>
+                    aria-describedby="button-addon2" id="serch_text_input_box">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="serch_btn()">검색</button>
             </div>
         </div>
     </div>

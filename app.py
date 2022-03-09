@@ -10,9 +10,6 @@ app = Flask(__name__)
 
 #승균님 데이터 베이스 연결
 client = MongoClient('mongodb+srv://test:sparta@cluster0.l91vj.mongodb.net/Cluster0?retryWrites=true&w=majority')
-#내 DB
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.cqbok.mongodb.net/Cluster0?retryWrites=true&w=majority')
-
 
 db = client.dbsparta
 
@@ -96,14 +93,59 @@ def signup():
 @app.route('/memaree')
 def memup():
     return render_template('memaree.html')
+
 @app.route('/board')
 def board():
     all_movies = list(db.dbmoviedata.find({}, {'_id': False}))
     return render_template('board.html', all_movies = all_movies)
 
+@app.route('/board/<condition>/<serch_text>/<flag>')
+def board_serch(condition, serch_text, flag):
+    if(flag == "0") :
+        return jsonify({'result': 'success', 'msg': '기다려주세요'})
+    elif(flag == "1"):
+        if(condition == "1") :
+            serch_condition = "movie_title"
+        elif(condition == "2") :
+            serch_condition = "movie_director"
+        elif(condition == "3") :
+            serch_condition = "movie_actor"
+        else :
+            return redirect(url_for('board'))
+
+        # serch_movies = list(db.dbmoviedata.find({"{0}".format(serch_condition) : serch_text}, {'_id': False}))
+        serch_movies = list(db.dbmoviedata.find({}, {'_id': False}))
+        serched_movies = []
+        check_actors = []
+        for serch_movie in serch_movies :
+            if(condition != "3"):
+                if( serch_text in serch_movie[serch_condition] ) :
+                    serched_movies.append(serch_movie)
+            else:
+                actors = serch_movie[serch_condition]
+                for actor in actors :
+                    if( serch_text in actor ) :
+                        check_actors.append(serch_movie)
+                for check_actor in check_actors :
+                    if(check_actor not in serched_movies):
+                        serched_movies.append(serch_movie)
+
+        return render_template('board.html', all_movies = serched_movies)
+
 @app.route('/board_write')
 def board_write():
-    return render_template('board_write.html')
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
+
+        userinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        return render_template('board_write.html')
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return redirect(url_for('home'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('home'))
 
 @app.route('/board_detail/<keyword>')
 def board_detail(keyword):
