@@ -10,9 +10,6 @@ app = Flask(__name__)
 
 #승균님 데이터 베이스 연결
 client = MongoClient('mongodb+srv://test:sparta@cluster0.l91vj.mongodb.net/Cluster0?retryWrites=true&w=majority')
-#내 DB
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.cqbok.mongodb.net/Cluster0?retryWrites=true&w=majority')
-
 
 db = client.dbsparta
 
@@ -103,7 +100,18 @@ def board():
 
 @app.route('/board_write')
 def board_write():
-    return render_template('board_write.html')
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
+
+        userinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        return render_template('board_write.html')
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return redirect(url_for('home'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('home'))
 
 @app.route('/board_detail/<keyword>')
 def board_detail(keyword):
