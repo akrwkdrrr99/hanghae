@@ -46,30 +46,27 @@
                 <div class="boardBox">
                     <div class="container">
                         <div class="row row-cols-1 row-cols-md-4 g-4" id="myBoard">
-                            <div class="col">
-                                <a href="#none">
-                                    <div class="card h-100" onclick="">
-                                        <img src="https://movie-phinf.pstatic.net/20220214_120/1644825641315cvVKI_JPEG/movie_image.jpg?type=m203_290_2"
-                                             class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <h5 class="card-title">제목</h5>
-                                            <p class="card-text">내용</p>
-                                            <p class="card-read">추천수 : 34</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
+{#                            <div class="col">#}
+{#                                <a href="#none">#}
+{#                                    <div class="card h-100" onclick="">#}
+{#                                        <img src="https://movie-phinf.pstatic.net/20220214_120/1644825641315cvVKI_JPEG/movie_image.jpg?type=m203_290_2"#}
+{#                                             class="card-img-top" alt="...">#}
+{#                                        <div class="card-body">#}
+{#                                            <h5 class="card-title">제목</h5>#}
+{#                                            <p class="card-text">내용</p>#}
+{#                                            <p class="card-read">추천수 : 34</p>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </a>#}
+{#                            </div>#}
 
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <section>
-                        <div id="data-container"></div>
-                        <div id="pagination"></div>
-                    </section>
-                </div>
+                <div class="text-center">
+<ul id="pagination-demo" class="pagination-sm"></ul>
+</div>
             </div>
 
 
@@ -116,9 +113,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="info">
-                        <div class="infoList" id="userName">
+                        <div class="infoList">
                             <p class="name">이름</p>
-                            <input type="text" class="form-control" value="{{ nickname }}" id="name">
+                            <input type="text" class="form-control" id="userName">
+                        </div>
+                        <div class="infoList">
+                            <p class="name">전화번호</p>
+                            <input type="number" class="form-control" id="userPhone">
+                        </div>
+                        <div class="infoList">
+                            <p class="name">이메일</p>
+                            <input type="text" class="form-control" id="userEmail">
                         </div>
                     </div>
                 </div>
@@ -126,7 +131,7 @@
                     <button type="button" class="btn btn-secondary updateModalCloseBtn" data-bs-dismiss="modal"
                             onclick="">취소
                     </button>
-                    <button type="button" class="btn btn-dark" onclick="">수정</button>
+                    <button type="button" class="btn btn-dark" onclick="member_update()">수정</button>
                 </div>
             </div>
         </div>
@@ -140,8 +145,15 @@
             memberRead()
         });
 
-        function boradList() {
+        $('#pagination-demo').twbsPagination({
+                totalPages: 35,  // 전체 page 수
+                visiblePages: 5,  // 출력될 page 수
+                onPageClick: function (event, page) {
+                    $('#page-content').text('Page ' + page);
+                }
+            });
 
+        function boradList() {
             $.ajax({
                 type: 'GET',
                 url: '/boardGet',
@@ -150,13 +162,14 @@
 
                     let rows = response['myboard']
                     for (let i = 0; rows.length; i++) {
-                        let tit = rows[i]['name']
-                        let desc = rows[i]['address']
+                        let tit = rows[i]['movie_title']
+                        let desc = rows[i]['movie_desc']
+                        let thum = rows[i]['movie_image']
 
                         let temp_html = `<div class="col">
                                             <a href="#none">
                                                 <div class="card h-100" onclick="">
-                                                    <img src="https://movie-phinf.pstatic.net/20220214_120/1644825641315cvVKI_JPEG/movie_image.jpg?type=m203_290_2"
+                                                    <img src="${thum}"
                                                          class="card-img-top" alt="...">
                                                     <div class="card-body">
                                                         <h5 class="card-title">${tit}</h5>
@@ -169,46 +182,14 @@
                                         `
                         $('#myBoard').append(temp_html);
 
+
                     }
                 }
             });
 
 
-            let container = $('#pagination');
-            container.pagination({
-                pageSize: 8,
-                dataSource: [
-                    {name: "hello1"},
-                    {name: "hello2"},
-                    {name: "hello3"},
-                    {name: "hello4"},
-                    {name: "hello5"},
-                    {name: "hello6"},
-                    {name: "hello7"},
-                    {name: "hello8"},
-                    {name: "hello9"},
-                    {name: "hello10"},
-                    {name: "hello11"},
-                    {name: "hello12"},
-                    {name: "hello13"},
-                    {name: "hello14"},
-                    {name: "hello15"},
-                    {name: "hello16"},
-                    {name: "hello17"},
-                ],
-                callback: function (data, pagination) {
-                    var dataHtml = '<ul>';
 
-                    $.each(data, function (index, item) {
-                        dataHtml += '<li>' + item.name + '</li>';
-                    });
 
-                    dataHtml += '</ul>';
-
-                    $("#data-container").empty();
-                    $("#data-container").append(dataHtml);
-                }
-            })
 
 
         }
@@ -219,16 +200,18 @@
                 url: '/memberRead',
                 data: {},
                 success: function (response) {
+                    console.log(response, '유저정보')
 
                     let rows = response['memberread']
-                    let name = rows[1]['name']
-                    let phone = rows[1]['phone']
-                    let email = rows[1]['email']
+                    let userId = rows[2]['userid']
+                    let name = rows[2]['username']
+                    let phone = rows[2]['userphone']
+                    let email = rows[2]['useremail']
 
                     let temp_html = `<div class="info">
                                         <div class="infoList">
                                             <p class="user">계정</p>
-                                            <p id="user"></p>
+                                            <p id="user">${userId}</p>
                                         </div>
                                         <div class="infoList" id="userName">
                                             <p class="name">이름</p>
@@ -250,15 +233,27 @@
         }
 
         function member_update() {
-            let name = $('#name').val()
-            let phone = $('#phone').val()
-            let email = $('#email').val()
+            let name = $('.updateModal #userName').val()
+            let phone = $('.updateModal #userPhone').val()
+            let email = $('.updateModal #userEmail').val()
 
             $.ajax({
                 type: 'POST',
                 url: '/mypageInfo',
                 data: {memberName_give: name, memberPhone_give: phone, memberEmail_give: email},
                 success: function (response) {
+                }
+            });
+        }
+
+
+        function user_delete(){
+            $.ajax({
+                type: 'POST',
+                url: '/userDelete',
+                data: {memberName_give: name, memberPhone_give: phone, memberEmail_give: email},
+                success: function (response) {
+                    console.log('삭제완료')
                 }
             });
         }
