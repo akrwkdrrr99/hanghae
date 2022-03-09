@@ -1,11 +1,19 @@
+from pymongo import MongoClient
 import jwt
 import datetime
+
+from bs4 import BeautifulSoup
+import requests
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 app = Flask(__name__)
 
-from pymongo import MongoClient
+#승균님 데이터 베이스 연결
 client = MongoClient('mongodb+srv://test:sparta@cluster0.l91vj.mongodb.net/Cluster0?retryWrites=true&w=majority')
+#내 DB
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.cqbok.mongodb.net/Cluster0?retryWrites=true&w=majority')
+
+
 db = client.dbsparta
 
 
@@ -45,6 +53,7 @@ def home():
         return redirect(url_for('index', msg="로그인 시간 만료"))
     except jwt.exceptions.DecodeError:
         return redirect(url_for('index', msg="로그인 정보 x"))
+
 
 @app.route('/login')
 def login():
@@ -88,6 +97,43 @@ def signup():
 @app.route('/memaree')
 def memup():
     return render_template('memaree.html')
+@app.route('/board')
+def board():
+    all_movies = list(db.dbmoviedata.find({}, {'_id': False}))
+    return render_template('board.html', all_movies = all_movies)
+
+@app.route('/board_write')
+def board_write():
+    return render_template('board_write.html')
+
+@app.route('/board_detail/<keyword>')
+def board_detail(keyword):
+    moviedata = list(db.dbmoviedata.find({'movie_arrindex': int(keyword)}, {'_id': False}))[0] #get영화 정보
+    userdatas = list(db.dbuser_moviedata.find({'movie_title': moviedata['movie_title']}, {'_id': False})) #get유저 정보
+    all_movies = list(db.dbmoviedata.find({}, {'_id': False}))
+    #글 번호
+    total_movie = len(all_movies)
+    if(moviedata['movie_arrindex'] > 1) :
+        pre_post = moviedata['movie_arrindex'] - 1
+    elif(moviedata['movie_arrindex'] == 1) :
+        pre_post = -1
+
+    if(moviedata['movie_arrindex'] < total_movie) :
+        next_post = moviedata['movie_arrindex'] + 1
+    elif(moviedata['movie_arrindex'] == total_movie) :
+        next_post = -2
+
+    return render_template('board_detail.html', movie_title=moviedata['movie_title'], movie_director=moviedata['movie_director'],
+                           movie_opendate=moviedata['movie_opendate'],
+                           movie_avg_star=moviedata['movie_avg_star'],
+                           movie_recommand=moviedata['movie_recommand'],
+                           movie_image = moviedata['movie_image'],
+                           movie_desc = moviedata['movie_desc'],
+                           movie_actor = moviedata['movie_actor'],
+                           pre_post  = pre_post,
+                           next_post = next_post,
+                           userdatas = userdatas
+                           )
 
 @app.route('/api', methods=["POST"])
 def api():
@@ -123,6 +169,96 @@ def api():
         }
         db.users.insert_one(doc)
         return jsonify({'code': 0, 'msg': '회원가입 완료'})
+    elif receive_reqtype == 'postMovieData':
+        url_receive = request.form['url_give']
+
+        #검색을 하면 dictionary 형태로 제공된다.
+        result = db.dbmoviedata.find_one({'movie_url': url_receive})
+
+        user_ID = request.form['user_ID_give']
+        star_receive = request.form['star_give']
+        comment_receive = request.form['comment_give']
+        actor_arr_x = []
+        
+        headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+        data = requests.get(url_receive, headers=headers)
+
+        soup = BeautifulSoup(data.text, 'html.parser')
+
+        title = soup.select_one('meta[property="og:title"]')['content']
+
+        user_moviedata = {
+            'movie_title': title,
+            'user_ID' : user_ID,
+            'user_star' : int(star_receive),
+            'user_comment': comment_receive,
+        }
+        print(user_moviedata)
+        db.dbuser_moviedata.insert_one(user_moviedata)
+
+        
+        if result is not None: # 이미 영화 데이터가 존재
+            totalsum = 0
+            avg_star = 0
+            #기존 DB 검색
+            all_user_moviedata = list(db.dbuser_moviedata.find({'movie_title': title}, {'_id': False}))
+            #추천 수 변경
+            pre_recommand = len(all_user_moviedata)
+            cur_recommand = pre_recommand + 1
+            #평균 별점 변경
+            for user_moviedata in all_user_moviedata :
+                totalsum += user_moviedata['user_star']
+            avg_star = (totalsum + int(star_receive)) / cur_recommand  # 기존 데이터들의 별점 합 에다가 현재 추가 하려는 데이터의 별점 추가 후 나누기
+            db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_recommand': cur_recommand}})
+            db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_avg_star': avg_star}})
+            return jsonify({'code': 10, 'msg': '이미 존재합니다.'})
+        
+        elif result is None: # 영화 데이터 X
+            #먼저 영화 전체 데이터 읽어옴
+            all_movies = list(db.dbmoviedata.find({}, {'_id': False}))
+            #글 번호
+            total_movie = len(all_movies)
+            movie_arrindex = total_movie + 1
+            #추천 수
+            recommand = 1 #첫 등록이므로 추천 수는 무조건 1
+            #평균 별점
+            avg_star = int(star_receive) #첫 등록이므로 평균 별점은 무조건 현재 별점
+            #영화 정보 크롤링
+            image = soup.select_one('meta[property="og:image"]')['content']
+            desc = soup.select_one('meta[property="og:description"]')['content']
+            releaseDates = soup.select(
+                'div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(4) > a')
+            openYear = releaseDates[0].text
+            openMonthDay = releaseDates[1].text
+            releaseDate = openYear + openMonthDay
+
+            actors = soup.select(
+                'div.article > div.section_group.section_group_frst > div:nth-child(2) > div > ul')
+            arr_actor_x = actors[0].text.strip().replace("감독", "").replace("주연", "").replace("조연", "").split("\n")
+            for actor_o in arr_actor_x:
+                if (actor_o != ""):
+                    if (" 역" not in actor_o):
+                        actor_arr_x.append(actor_o)
+            movie_director = actor_arr_x[0]
+            actor_arr_o = actor_arr_x[1:len(arr_actor_x)]
+
+            moviedata = {
+                'movie_title': title,
+                'movie_image': image,
+                'movie_desc': desc,
+                'movie_opendate' : releaseDate.strip(),
+                'movie_director' : movie_director,
+                'movie_actor' : actor_arr_o,
+                'movie_url' : url_receive,
+                'movie_arrindex' : movie_arrindex,
+                'movie_recommand' : recommand,
+                'movie_avg_star' : avg_star
+            }
+            db.dbmoviedata.insert_one(moviedata)
+
+            return jsonify({'code': 10, 'msg': '등록이 완료되었습니다.'})
+
     else:
         return jsonify({'code': -99, 'msg': '정의되지 않은 요청코드'})
 
@@ -154,6 +290,7 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+
 
 
 
