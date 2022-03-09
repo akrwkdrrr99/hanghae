@@ -1,73 +1,104 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="join_wrap">
-<!--     <form name="fregisterform" id="fregisterform" autocomplete="off" method="post" onsubmit="return fregisterform_submit(this);" action="POST" autocomplete="off"> -->
-<!--         <input type="hidden" name="pt_id" value="admin"> -->
-<!--         <input type="hidden" name="token" value="receive_token"> -->
         <ul class="f_join join">
-            <li><label for="id">아이디<i>*</i></label><input type="text" id="input_id" name="input_id" maxlength="30"><button onclick="id_chk_popup()">중복확인</button></li>
+            <input type="hidden" name="db_id_chk"  id="db_id_chk" value="0"/>
+            <li>
+                <label for="id">아이디<i>*</i></label>
+                <input type="text" id="input_id" name="input_id" maxlength="30" onchange="reset_db_chk_id()">
+                <button onclick="duplicateCheck()">중복확인</button>
+            </li>
             <li><label for="input_pw">패스워드<i>*</i></label><input type="password" id="input_pw" name="input_pw" maxlength="30"></li>
             <li><label for="input_chkpw">패스워드 확인<i>*</i></label><input type="password" name="input_chkpw" id="input_chkpw" maxlength="30"></li>
-            <li><label for="input_name">이름<i>*</i></label><input type="text" id="input_name" name="input_name" maxlength="6"></li>
-            <li><label for="input_email">이메일주소</label><input type="text" id="input_email" name="input_email"></li>
-            <li><label for="input_phone">휴대폰번호</label><input type="text" id="input_phone" name="input_phone"></li>
+            <li><label for="input_name">이름<i>*</i></label><input type="text" id="input_name" name="input_name" maxlength="10"></li>
+            <li><label for="input_email">이메일주소</label><input type="text" id="input_email" name="input_email" onchange="emailValidator(this.value)"></li>
+            <li><label for="input_phone">휴대폰번호</label><input type="text" id="input_phone" name="input_phone" placeholder="-없이 입력해주세요." onchange="telValidator(this.value)"></li>
         <ul>
         <div class="btn_wrap">
             <a href="javascript:history.back()" class="btn_type2">이전으로</a>
             <button onclick="MovieWForm_submit()" class="btn_type3" id="btn_submit">회원가입</button>
         </div>
-<!--     </form> -->
     <script>
-    function MovieWForm_submit(){
-        const ip_id = document.getElementById('input_id');
-        const ip_pw = document.getElementById('input_pw');
-        const ip_chkpw = document.getElementById('input_chkpw');
-        const ip_name = document.getElementById('input_name');
-        const ip_email = document.getElementById('input_email');
-        const ip_phone = document.getElementById('input_phone');
+        function reset_db_chk_id() {
+                let db_id_chk = document.getElementById("db_id_chk")
+                db_id_chk.setAttribute('value', '0');
+        }
 
-        if(ip_id.value.length < 3) {
-            alert("아이디를 3글자 이상 입력하십시오.");
-            ip_id.focus();
+        function emailValidator(args) {
+            const msg = '유효하지 않는 이메일입니다.';
+            if (/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i.test(args)){
+                return true;
+            }
+            alert(msg);
             return false;
         }
 
-        if(ip_pw.value.length < 4 || ip_pw.value.length > 30) {
-            alert("비밀번호는 4글자 이상, 30글자 이하만 이용 가능합니다.")
-            ip_pw.focus();
+        function telValidator(args) {
+            const msg = '유효하지 않는 전화번호입니다.';
+            if (/^((01[1|6|7|8|9])[1-9]+[0-9]{6,7})|(010[1-9][0-9]{7})$/.test(args)) {
+                return true;
+            }
+            alert(msg);
             return false;
         }
 
-        if(ip_pw.value != ip_chkpw.value) {
-            alert("패스워드가 다릅니다.")
-            ip_chkpw.focus();
-            return false;
-        }
+        function MovieWForm_submit(){
+            const db_id_chk = document.getElementById("db_id_chk")
+            const ip_id = document.getElementById('input_id');
+            const ip_pw = document.getElementById('input_pw');
+            const ip_chkpw = document.getElementById('input_chkpw');
+            const ip_name = document.getElementById('input_name');
+            const ip_email = document.getElementById('input_email');
+            const ip_phone = document.getElementById('input_phone');
 
-        if(ip_name.value == " ") {
-            alert("이름을 입력해주세요.")
-            ip_name.focus();
-            return false;
-        }
+            if(db_id_chk.value == 0) {
+                alert("아이디 중복확인이 필요합니다.");
+                ip_id.focus();
+                return false;
+            }
 
-        if(ip_email.value == " " || ip_email.value.length <1) {
-            alert("이메일을 입력해주세요.")
-            ip_email.focus();
-            return false;
-        }
+            if(ip_id.value.length < 3) {
+                alert("아이디를 3글자 이상 입력하십시오.");
+                ip_id.focus();
+                return false;
+            }
 
-        if(ip_phone.value == " " || ip_phone.value.length < 1) {
-            alert("전화번호를 입력해주세요.")
-            ip_phone.focus();
-            return false;
-        }
+            if(ip_pw.value.length < 4 || ip_pw.value.length > 30) {
+                alert("비밀번호는 4글자 이상, 30글자 이하만 이용 가능합니다.")
+                ip_pw.focus();
+                return false;
+            }
 
-        if(confirm("회원가입 하시겠습니까?") == false) {
-            return false;
-        }
+            if(ip_pw.value != ip_chkpw.value) {
+                alert("패스워드가 다릅니다.")
+                ip_chkpw.focus();
+                return false;
+            }
 
-        signupUser()
-    }
+            if(ip_name.value == " " || ip_name.value.length <1) {
+                alert("이름을 입력해주세요.")
+                ip_name.focus();
+                return false;
+            }
+
+            if(ip_email.value == " " || ip_email.value.length <1) {
+                alert("이메일을 입력해주세요.")
+                ip_email.focus();
+                return false;
+            }
+
+            if(ip_phone.value == " " || ip_phone.value.length < 1 ) {
+                alert("전화번호를 입력해주세요.")
+                ip_phone.focus();
+
+                return false;
+            }
+
+            if(confirm("회원가입 하시겠습니까?") == false) {
+                return false;
+            }
+            signupUser()
+        }
 
     </script>
 
@@ -75,10 +106,30 @@
         const POST_REQUEST_SIGNUP = 'postRequestSignUp'
 
         function duplicateCheck(){
-            alert('아이디 중복체크 구현 예정입니다.')
+            var userid = $('#input_id').val();
+            var useridchk = $('#db_id_chk').val();
+            $.ajax({
+                type: "GET",
+                url: "/useridchk",
+                data: {},
+                success: function (response) {
+                let rows = response['users']
+                    for(i=0; i<rows.length; i++) {
+                        console.log(rows[i].userid, userid)
+                        if(rows[i].userid == userid) {
+                            $('#db_id_chk').val("0");
+                            alert('중복된 아이디입니다.')
+                            return false;
+                        }
+                    }
+                    alert('사용가능한 아이디입니다.')
+                    $('#db_id_chk').val("1");
+                    console.log($('#db_id_chk').val());
+                    return true;
+                }
+            })
         }
         function signupUser(){
-            var renew = "";
             $.ajax({
                 type: "POST",
                 url: "/api",
@@ -88,7 +139,7 @@
                     userPw: $('#input_pw').val(),
                     userName: $('#input_name').val(),
                     userEmail: $('#input_email').val(),
-                    userPhone: renew
+                    userPhone: $('#input_phone').val()
                 },
                 success: function (response) {
                     let resultCode = response['code']

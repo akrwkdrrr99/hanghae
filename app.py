@@ -57,6 +57,12 @@ def home():
 def login():
     return render_template('login.html')
 
+@app.route("/useridchk", methods=["GET"])
+def user_id_get():
+    users_list = list(db.users.find({}, {'_id': False}))
+    return jsonify({'users': users_list})
+
+
 # @app.route("/login/pwfind", methods=["GET"])
 # def login_pw_find():
 #     user_list = list(db.users.find({}, {'_id': False}))
