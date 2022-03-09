@@ -56,16 +56,25 @@ header .menu_bt ul li:nth-child(2) span:first-child{background-color: #2251ff; w
 header .menu_bt ul li:nth-child(2) span:last-child{width: 18px;}
 header .menu_bt.on ul li:nth-child(1){width: 0; height: 0; margin: 0; opacity: 0;}
 header .menu_bt.on ul li:nth-child(2){transform: rotate(45deg); margin: 0;}
-header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate(
--45deg);}
+header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg);}
 
-
+/* index */
 .main_wrap {
-  width: 100%; height: auto; position: relative;
+  width: 100%;
+  height: 800px;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+
 }
 
 .main_wrap video {
-  width: 100%;
+  width: 100vw;
+  height: auto;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
 }
 
 .main_wrap .img_wrap {
@@ -80,6 +89,83 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate(
   opacity: 0;
 }
 
+.hs-area {
+  position: relative;
+  height: 120px;
+}
+
+.hs-area .index-card-box {
+  width: 100%;
+  margin-top: 500px;
+  display: flex;
+  flex-direction: column; /* row로 변경 시, 내용물이 가로로 나열됨 */
+  justify-content: center;
+  align-items: center;
+}
+
+.hs-area .index-mainrank-area {
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/*.hs-area .index-mainrank-area .card {*/
+/*  max-width: 450px;*/
+/*  width: 100%;*/
+/*  margin: 0 25px 0 25px;*/
+/*  display: block;*/
+/*}*/
+
+.hs-area .index-subrank-area {
+  margin-top: 200px;
+  width: 90%;
+  height: auto;
+
+}
+
+.hs-area .card-body {
+  margin-left: 30px;
+  line-height: 2.4;
+}
+.hs-area .index-subrank-area .card-body {
+  padding: 0;
+}
+
+.hs-area .index-subrank-area img {
+  display: block;
+  margin: auto;
+}
+
+.hs-area .index-subrank-area h1 {
+  font-size: 50px;
+  line-height: 2.6;
+}
+
+.hs-area {display: flex; justify-content: space-around; padding-top: 22px;}
+.hs-area .cp_box_ot {position: relative; width: 30%; height: 600px; overflow: hidden; box-shadow: 15px 10px 15px 0 rgba(0, 0, 0, 0.30);  border-radius: 30px; z-index: 10;}
+.hs-area .cp_box {position: relative; padding: 50px 38px 50px 42px; display: flex; height: 100%; border-radius: 30px; flex-flow: column nowrap; justify-content: flex-end;  overflow: hidden; cursor: pointer; transition: 0.5s all;}
+.hs-area .cp_box .blurImg {width: 100%; height: 100%; position: absolute; top:0; left:0; display: block; background: no-repeat center / cover; z-index: -1; transition: 1s all;}
+.hs-area .cp_box_ot:nth-child(2) .blurImg {}
+.hs-area .cp_box_ot:nth-child(3) .blurImg {}
+.hs-area .cp_box_ot:nth-child(4) .blurImg {}
+.hs-area .cp_box:before {content:''; position: absolute; top:0; left:0; width: 100%; height: 100%; border-radius: 30px; background-color: rgba(0,0,0, 0.62); transition: 0.5s all; display: block;}
+.hs-area .cp_box .subject {color: #fff; font-weight: bold; text-shadow: 3px 0 2px rgba(0, 0, 0, 0.35); font-size: 28px; transition: 0.5s all; position: relative; z-index:5;}
+.hs-area .cp_box .text {font-size: 16px; color: #fff; line-height: 1.5; transition: 0.75s all; overflow:hidden; z-index:5; height:0;}
+/* hover */
+.hs-area .cp_box:hover {}
+.hs-area .cp_box:hover .blurImg {filter:blur(20px);}
+.hs-area .cp_box:hover:before {background-color: rgba(255,255,255, 0.7); border: 1px solid #dfdfdf;}
+.hs-area .cp_box:hover .subject {color: #000; padding-bottom: 20px; text-shadow:none;}
+.hs-area .cp_box:hover .text {overflow:visible; height: 240px; color: #222; padding-top: 33px;}
+
+
+
 /* login */
 .login_wrap {
   height: 500px; width: 420px; margin: 0 auto; margin-top: 180px;
@@ -91,10 +177,12 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate(
 .login_wrap  .login_box {
   display: flex;
   justify-content: center; align-items: center;
+  width: 90%; margin: 0 auto;
 }
-.login_wrap ul {height: 100px; display: flex; flex-flow: column nowrap; justify-content: space-between; padding-right: 15px;}
+.login_wrap ul {height: 100px; display: flex; flex-flow: column nowrap; justify-content: space-between; padding-right: 15px; width: calc(100% - 100px)}
 .login_wrap ul li {}
 .login_wrap ul li:first-child  {}
+<<<<<<< HEAD
 .login_wrap input {padding: 8px 12px; font-size: 16px;  border: 1px solid #fff; background: none; color: #fff;}
 .login_wrap button {font-size: 18px; text-align:center; background-color: #fff; height: 100px; width :100px}
 
@@ -240,4 +328,34 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate(
 }
 
 
+=======
+.login_wrap ul input {padding: 8px 12px; font-size: 16px;  border: 1px solid #fff; background: none; color: #fff; width: 100%; display: block;}
+.login_wrap .login_box button {font-size: 18px; text-align:center; background-color: #fff; height: 100px; width :100px}
+
+.login_wrap .login_plus {display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0; color: #fff; width: 90%;;}
+.login_wrap .login_plus .lp_left label {cursor:pointer;}
+.login_wrap .login_plus .lp_left label span {position: relative; padding-left: 16px;}
+.login_wrap .login_plus .lp_left label span:after {position: absolute; left: 0; top:50%; transform: translateY(-50%); border: 1px solid #fff;  content:''; width :12px; height: 12px; transition: 0.35s all;}
+.login_wrap .login_plus .lp_left label input:checked ~ span:after {background-color: #fff;}
+.login_wrap .login_plus a {color: #fff; padding-left: 7px;}
+.login_wrap .lp_btm {width: 100%; padding: 20px 0 0;}
+.login_wrap .lp_btm a {width: 90%; display: block; margin:0 auto; height: 40px; line-height: 40px; background-color: #fff; color: #222; text-align: center}
+
+.join_wrap { max-width: 1400px; margin: 120px auto 0;}
+.join_wrap ul{width: 100%; height: auto; border-top: 2px solid var(--color-point-blue); margin-bottom: 80px;}
+.join_wrap ul li{width: 100%; height: auto; display: flex; align-items: center; border-bottom: 1px solid #dfdfdf; padding: 15px 0;}
+.join_wrap ul li>label{width: 180px; height: auto; padding-left: 20px; font-size: 16px; font-weight: 400; color: #f1f1f1; display: block;}
+.join_wrap ul li>label br{display: none;}
+.join_wrap ul li>label i{color: var(--color-point-blue);}
+.join_wrap ul li button {display: block; width: 120px; height: 45px; line-height: 43px;  border: 1px solid #fff; color: #fff; background: none; text-align: center; margin-left: 12px; transition: 0.35s all;}
+.join_wrap ul li button:hover {background-color: #fff; color: #222;}
+.join_wrap ul li {height: auto; display: flex; align-items: center;}
+.join_wrap.edit ul li{line-height: 45px;}
+.join_wrap ul li input[type="text"], .join_wrap ul li input[type="password"], .join_wrap ul li select{height: 45px; border: 1px solid #dfdfdf; border-radius: 0; padding: 0 10px; font-size: 16px; font-weight: 400; color: #505050;}
+.join_wrap ul li input[type="text"]::placeholder{font-size: 14px;}
+
+.btn_wrap {margin: 40px auto 0; display: flex; justify-content: center; }
+.btn_wrap [class*="btn_t"] {width: 80px; height: 44px; line-height: 42px; text-align: center; border: 1px solid #fff;  color: #fff; background: none; margin: 0 8px; transition: 0.35s all;}
+.join_wrap [class*="btn_t"]:hover {background-color: #fff; color: #222;}
+>>>>>>> a536a9ab5f7dfbc87aede91197c8d5212593f142
 

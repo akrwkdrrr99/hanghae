@@ -15,6 +15,7 @@ SECRET_KEY = "MOVIEW"
 @app.route('/')
 def home():
     receive_token = request.cookies.get('mytoken')
+<<<<<<< HEAD
     return render_template('index.html')
     # try:
     #     payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
@@ -24,11 +25,43 @@ def home():
     #     return redirect(url_for('index', msg="로그인 시간 만료"))
     # except jwt.exceptions.DecodeError:
     #     return redirect(url_for('index', msg="로그인 정보 x"))
+=======
+
+    comment_list = db.dbuser_moviedata.aggregate([
+        {'$group': {'_id': '$movie_title', 'count': {'$sum':1}, 'star_avg':{'$avg':'$user_star'}}}
+        , {'$sort':{'count': -1}}
+    ])
+    comments = list(comment_list)
+
+    #메인랭크는 영화순위 중 1~3위 정보를 클라이언트에 내려준다.
+    mainrank_list = []
+    #서브랭크는 영화순위 중 1~3위 정보를 클라이언트에 내려준다.
+    subrank_list = []
+    for i in range(len(comments)):
+        movies = db.dbmoviedata.find_one({'movie_title':comments[i]['_id']}, {'_id':False})
+        if i < 3:
+            movies['movie_rank'] = i+1
+            mainrank_list.append(movies)
+        else:
+            movies['movie_rank'] = i+1
+            subrank_list.append(movies)
+
+    return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list)
+    try:
+        payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({'id':payload['id']})
+        return render_template('index.html')
+    except jwt.ExpiredSignatureError: # 예외처리 스타트
+        return redirect(url_for('index', msg="로그인 시간 만료"))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('index', msg="로그인 정보 x"))
+>>>>>>> a536a9ab5f7dfbc87aede91197c8d5212593f142
 
 @app.route('/login')
 def login():
     return render_template('login.html')
 
+<<<<<<< HEAD
 @app.route('/mypage')
 def mypage():
     return render_template('mypage.html')
@@ -61,15 +94,25 @@ def web_mars_post():
     return jsonify({'msg': '수정 완료 !'})
 
 
+=======
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+@app.route('/mem_area')
+def memup():
+    return render_template('mem_area.html')
+>>>>>>> a536a9ab5f7dfbc87aede91197c8d5212593f142
 
 @app.route('/api', methods=["POST"])
 def api():
     receive_reqtype = request.form['reqType']
+
     if receive_reqtype == 'getRequestLogin':
         receive_userid = request.form['userId']
         receive_userpw = request.form['userPw']
-
         result = db.users.find_one({'id': receive_userid, 'pw': receive_userpw})
+
         if result is not None:
             payload = {
                 'id': receive_userid,
@@ -77,10 +120,26 @@ def api():
             }
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
             return jsonify({'code': 0, 'msg': '정상입니다.', 'token': token})
+
         else:
             return jsonify({'code': -1, 'msg': 'id/pw가 일치하지 않습니다.'})
+    elif receive_reqtype == 'postRequestSignUp':
+        receive_userid = request.form['userId']
+        receive_userpw = request.form['userPw']
+        receive_username = request.form['userName']
+        receive_useremail = request.form['userEmail']
+        receive_userphone = request.form['userPhone']
+        doc = {
+            'userid': receive_userid
+            , 'userpw': receive_userpw
+            , 'username': receive_username
+            , 'useremail': receive_useremail
+            , 'userphone': receive_userphone
+        }
+        db.users.insert_one(doc)
+        return jsonify({'code': 0, 'msg': '회원가입 완료'})
     else:
-        return jsonify({'code': -99, 'msg': '정의되지 않은 요청코드입니다.'})
+        return jsonify({'code': -99, 'msg': '정의되지 않은 요청코드'})
 
 
 
