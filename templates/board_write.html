@@ -1,190 +1,32 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-
-    <title>웹사이트 제목</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
-
-    <style>
-        * {
-            font-family: 'Gowun Dodum', sans-serif;
-        }
-
-        .mytitle {
-            width: 100%;
-            height: 250px;
-
-            background-image: url('https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg');
-            background-position: center;
-            background-size: cover;
-
-            color: white;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mytitle>button {
-            width: 400px;
-            height: 250px;
-
-            font-size: 45pt;
-
-            background-color: transparent;
-            color: white;
-
-            /* border-radius: 50px; */
-            border: 1px solid transparent;
-        }
-
-        .mytitle>button:hover {
-            /* border: 2px solid white; */
-            color: red;
-        }
-
-        .mycomment {
-            color: gray;
-        }
-
-        .mycards {
-            margin: 20px auto 0px auto;
-            width: 95%;
-            max-width: 1200px;
-        }
-
-        .mypost {
-            width: 95%;
-            max-width: 800px;
-            /* margin-top: 20px; */
-            margin: 20px auto 0px auto;
-            /* padding: 20px; */
-            /* box-shadow: 0px 0px 3px 0px gray; */
-        }
-
-        .mypost_inputgroup {
-            width: 200px;
-        }
-
-        .mybtns {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-
-            margin-top: 20px;
-        }
-
-        .mybtns>button {
-            margin-right: 10px;
-        }
-
-        .title_h3 {
-            margin: 20px 0px 20px 0px;
-        }
 
 
-        .write_button {
-            width: 100px;
-            float: right;
-            margin-right: 10px;
-        }
-
-        .pagination {
-            width: 100%;
-            margin-top: 16px;
-
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-        }
-
-        th,
-        td {
-            text-align: center;
-        }
-
-        .serchcontents {
-            width: 100%;
-
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .serch_inputform {
-            margin-top: 16px;
-            margin-left: 10px;
-        }
-    </style>
-    <script>
-        $(document).ready(function () {
-            listing();
-        });
-
-        function listing() {
-            $.ajax({
-                type: 'GET',
-                url: '/movie',
-                data: {},
-                success: function (response) {
-
-                }
-            })
-        }
-
-        function posting() {
-            let url = $('#url').val()
-            let star = $('#star').val()
-            let comment = $('#comment').val()
-
-            $.ajax({
-                type: 'POST',
-                url: '/movie',
-                data: { url_give: url, star_give: star, comment_give: comment },
-                success: function (response) {
-                    alert(response['msg'])
-                    window.location.reload()
-                }
-            });
-        }
-
-        function open_box() {
-            // $('#post-box').show()
-        }
-
-        function close_box() {
-        }
-    </script>
-</head>
-
-<body>
-    <div class="mytitle">
-        <button onclick="open_box()">웹사이트 제목 /뒤에는 동영상 재생</button>
+{% extends "layout.html" %}
+{% block content %}
+<section id="section1">
+    <div class="main_wrap">
+        <video controls autoplay muted loop>
+            <source src="{{ url_for('static', filename='/video/theBatman.mp4') }}" type="video/mp4">
+        </video>
+        <div class="img_wrap">
+            <img src="https://movie-phinf.pstatic.net/20220302_71/1646183071913TYi4c_JPEG/movie_image.jpg?type=m665_443_2"
+                alt="대체이미지">
+        </div>
     </div>
+</section>
 
-
-    <div class="mypost" id="post-box">
+<div class="board_write_html">
+        <div class="mypost" id="post-box">
         <div class="title_h3">
             <h3>게시글 작성</h3>
         </div>
 
         <div class="form-floating mb-3">
-            <input id="url" type="email" class="form-control" placeholder="name@example.com">
+            <input id="user_ID" type="text" class="form-control" placeholder="">
+            <label>User_ID</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input id="url" type="text" class="form-control" placeholder="">
             <label>영화URL</label>
         </div>
 
@@ -214,12 +56,13 @@
         </div>
 
         <div class="mybtns">
-            <button onclick="posting()" type="button" class="btn btn-dark">등록하기</button>
-            <button onclick="close_box()" type="button" class="btn btn-outline-dark">뒤로가기</button>
+            <button onclick="posting()" type="button" class="btn btn-outline-light">등록하기</button>
+            <button onclick="close_box()" type="button" class="btn btn-outline-light">뒤로가기</button>
         </div>
     </div>
+</div>
 
 
-</body>
 
-</html>
+{% endblock %}
+

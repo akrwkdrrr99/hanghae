@@ -97,3 +97,145 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate(
 .login_wrap ul li:first-child  {}
 .login_wrap input {padding: 8px 12px; font-size: 16px;  border: 1px solid #fff; background: none; color: #fff;}
 .login_wrap button {font-size: 18px; text-align:center; background-color: #fff; height: 100px; width :100px}
+
+.board_html .title_h3{
+  float: left;
+  margin-top: 11px;
+  margin-left: 10px;
+  color: white;
+}
+
+.board_html .arrange_list{
+  width: 110px;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+
+}
+
+.board_html .write_button{
+  width: 100px;
+  float: right;
+  margin-right: 10px;
+}
+
+.board_html .pagination{
+  width: 100%;
+  margin-top: 16px;
+
+  display: flex;
+  flex-direction:row;
+  align-items: center;
+  justify-content: center;
+}
+
+th, td {
+  text-align: center;
+}
+
+.board_html .serchcontents{
+  width: 100%;
+
+  display: flex;
+  flex-direction:row;
+  align-items: center;
+  justify-content: center;
+}
+
+.board_html .serch_inputform{
+  margin-top: 16px;
+  margin-left: 10px;
+}
+
+.board_write_html .mypost {
+  width: 95%;
+  max-width: 800px;
+  margin: 20px auto 0px auto;
+}
+
+.board_write_html .mypost_inputgroup {
+  width: 200px;
+}
+
+.board_write_html .mybtns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 20px;
+}
+
+.board_write_html .mybtns>button {
+  margin-right: 10px;
+}
+
+.board_detail_html .button_set {
+  width: 100%;
+  float: right;
+  margin-top: 10px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+}
+
+.board_detail_html .button_set>button {
+  margin-right: 10px;
+}
+
+.board_detail_html .title_h3 {
+  /* float: left; */
+  color: red;
+
+  width: 400px;
+  margin-top: 11px;
+  margin-left: 10px;
+
+}
+
+.board_detail_html .title_h3_sub_info {
+  color: red;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+}
+
+.board_detail_html .title_h3_sub_info > h6 {
+  margin: 3px 11px 11px 11px;
+}
+
+.board_detail_html .main_contents {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-top: 10px;
+  border: 1px solid;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.board_detail_html .movie_img {
+  float: left;
+  margin-left: 11px;
+  width: 300px;
+  height: 300px;
+}
+
+.board_detail_html .movie_actor_desc {
+  margin: 0px 0px 0px 50px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: right;
+}
+.board_detail_html .reply{
+  margin-top: 11px;
+  margin-left: 11px;
+}

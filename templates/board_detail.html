@@ -1,138 +1,84 @@
-<!doctype html>
-<html lang="en">
+{% extends "layout.html" %}
+{% block content %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<div class="board_detail_html">
+    <section id="section1">
+        <div class="main_wrap">
+            <video controls autoplay muted loop>
+                <source src="{{ url_for('static', filename='/video/theBatman.mp4') }}" type="video/mp4">
+            </video>
+            <div class="img_wrap">
+                <img src="https://movie-phinf.pstatic.net/20220302_71/1646183071913TYi4c_JPEG/movie_image.jpg?type=m665_443_2"
+                    alt="대체이미지">
+            </div>
+        </div>
+    </section>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
+    <div class="button_set">
+        <button type="button" class="btn btn-outline-primary">목록</button>
+        <button type="button" class="btn btn-outline-primary">이전 글</button>
+        <button type="button" class="btn btn-outline-primary">다음 글</button>
+    </div>
 
-    <title>웹사이트 제목</title>
+    <div class="title_h3">
+        <h3>영화 제목</h3>
+    </div>
 
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <div class="title_h3_sub_info">
+        <h6>감독</h6>
+        <h6>개봉일</h6>
+        <h6>평균 별점</h6>
+        <h6>추천 수</h6>
+        <h6>조회 수</h6>
+    </div>
 
-    <style>
-        * {
-            font-family: 'Gowun Dodum', sans-serif;
-        }
-
-        .mytitle {
-            width: 100%;
-            height: 250px;
-
-            background-image: url('https://movie-phinf.pstatic.net/20210715_95/1626338192428gTnJl_JPEG/movie_image.jpg');
-            background-position: center;
-            background-size: cover;
-
-            color: white;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .mytitle > button {
-            width: 400px;
-            height: 250px;
-
-            font-size: 45pt;
-
-            background-color: transparent;
-            color: white;
-
-            /* border-radius: 50px; */
-            border: 1px solid transparent;
-        }
-
-        .mytitle > button:hover {
-            /* border: 2px solid white; */
-            color: red;
-        }
-
-        .title_h3{
-            /* float: left; */
-            margin-top: 11px;
-            margin-left: 10px;
-            
-        }
-
-        .button_set{
-            width: 300px;
-            float: right;
-            margin-top: 10px;
-
-            display: flex;
-            flex-direction:row;
-            align-items:center;
-            justify-content:right;
-        }
-        .button_set>button{
-            margin-right: 10px;
-        }
-
-    </style>
-    <script>
-        $(document).ready(function () {
-            listing();
-        });
-
-        function listing() {
-            $.ajax({
-                type: 'GET',
-                url: '/movie',
-                data: {},
-                success: function (response) {
-                }
-            })
-        }
-
-        function posting() {
-            let url = $('#url').val()
-            let star = $('#star').val()
-            let comment = $('#comment').val()
-
-            $.ajax({
-                type: 'POST',
-                url: '/movie',
-                data: {url_give: url, star_give: star, comment_give:comment},
-                success: function (response) {
-                    alert(response['msg'])
-                    window.location.reload()
-                }
-            });
-        }
-
-        function open_box() {
-            $('#post-box').show()
-        }
-    </script>
-</head>
-
-<body>
-<div class="mytitle">
-    <button onclick="open_box()">웹사이트 제목 /뒤에는 동영상 재생</button>
-</div>
-
-<div class="button_set">
-    <button type="button" class="btn btn-outline-primary">목록</button>
-    <button type="button" class="btn btn-outline-primary">이전 글</button>
-    <button type="button" class="btn btn-outline-primary">다음 글</button>
-</div>
-
-<div class="title_h3">
-    <h3>영화 추천 게시판</h3>
+    <div class="main_contents">
+        <div class="movie_img">
+            <img src="https://blog.kakaocdn.net/dn/borct0/btqzWZy4XY2/RYAcAaiU4w3mMSybRmp0WK/img.png"
+                class="img-thumbnail" alt="...">
+        </div>
+        <div class="movie_actor_desc">
+            <div class="card border-dark mb-3" style="max-width: 18rem;">
+                <div class="card-body text-dark">
+                    <h5 class="card-title">줄거리</h5>
+                    <p class="card-text">아니 어쩜 그런 슬픈 일이 ..</p>
+                </div>
+            </div>
+            <div class="card border-dark mb-3" style="max-width: 18rem;">
+                <div class="card-body text-dark">
+                    <h5 class="card-title">출연 배우</h5>
+                    <p class="card-text">A ,B ,C ,D ..</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="reply">
+        <div class="card">
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>추천 이유</p>
+                    <footer class="blockquote-footer">작성자 , 별점 , 작성일</footer>
+                </blockquote>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>추천 이유</p>
+                    <footer class="blockquote-footer">작성자 , 별점 , 작성일</footer>
+                </blockquote>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>추천 이유</p>
+                    <footer class="blockquote-footer">작성자 , 별점 , 작성일</footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
 </div>
 
 
-
-
-
-</body>
-
-</html>
+{% endblock %}
