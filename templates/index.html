@@ -18,7 +18,7 @@
         <div class="index-card-box">
             <div class="index-mainrank-area">
                 {% for mainrank in mainrank_list %}
-                    <a class="cp_box_ot" href="{{ mainrank.movie_url }}" target="_blank">
+                    <a class="cp_box_ot" href="/board_detail/{{ mainrank.movie_arrindex }}">
                         <div class="cp_box">
                             <div class="blurImg" style="background-image: url('{{ mainrank.movie_image }}')"></div>
                             <div class="subject">
@@ -35,26 +35,13 @@
                     </a>
                 {% endfor %}
             </div>
-{#            <div class="index-mainrank-area">#}
-{#                {% for mainrank in mainrank_list %}#}
-{#                    <a class="card bg-dark text-white" href="{{ mainrank.movie_url }}" target="_blank">#}
-{#                        <img src="{{ mainrank.movie_image }}" class="card-img" alt="...">#}
-{#                        <div class="card-img-overlay">#}
-{#                            <h5 class="card-title">{{mainrank.movie_title}}</h5>#}
-{#                            <p class="card-text">{{mainrank.movie_desc}}</p>#}
-{#                            <p class="card-text">Last updated 3 mins ago</p>#}
-{#                        </div>#}
-{##}
-{#                    </a>#}
-{#                {% endfor %}#}
-{#            </div>#}
 
             <div class="index-subrank-area">
                 {% for subrank in subrank_list %}
                     <div class="card mb-3 bg-transparent">
                         <div class="row g-0">
                             <div class="col-md-2">
-                                <a href="{{ subrank.movie_url }}" target="_blank">
+                                <a href="/board_detail/{{ subrank.movie_arrindex }}">
                                     <img src="{{subrank.movie_image}}" class="img-fluid rounded-start" alt="...">
                                 </a>
                             </div>
