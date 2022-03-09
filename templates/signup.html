@@ -5,9 +5,9 @@
 <!--         <input type="hidden" name="pt_id" value="admin"> -->
 <!--         <input type="hidden" name="token" value="receive_token"> -->
         <ul class="f_join join">
-            <li><label for="id">아이디<i>*</i></label><input type="text" id="input_id" name="input_id" maxlength="12"><button onclick="id_chk_popup()">중복확인</button></li>
-            <li><label for="input_pw">패스워드<i>*</i></label><input type="password" id="input_pw" name="input_pw" maxlength="18"></li>
-            <li><label for="input_chkpw">패스워드 확인<i>*</i></label><input type="password" name="input_chkpw" id="input_chkpw" maxlength="18"></li>
+            <li><label for="id">아이디<i>*</i></label><input type="text" id="input_id" name="input_id" maxlength="30"><button onclick="id_chk_popup()">중복확인</button></li>
+            <li><label for="input_pw">패스워드<i>*</i></label><input type="password" id="input_pw" name="input_pw" maxlength="30"></li>
+            <li><label for="input_chkpw">패스워드 확인<i>*</i></label><input type="password" name="input_chkpw" id="input_chkpw" maxlength="30"></li>
             <li><label for="input_name">이름<i>*</i></label><input type="text" id="input_name" name="input_name" maxlength="6"></li>
             <li><label for="input_email">이메일주소</label><input type="text" id="input_email" name="input_email"></li>
             <li><label for="input_phone">휴대폰번호</label><input type="text" id="input_phone" name="input_phone"></li>
@@ -19,7 +19,54 @@
 <!--     </form> -->
     <script>
     function MovieWForm_submit(){
-        signupUser();
+        const ip_id = document.getElementById('input_id');
+        const ip_pw = document.getElementById('input_pw');
+        const ip_chkpw = document.getElementById('input_chkpw');
+        const ip_name = document.getElementById('input_name');
+        const ip_email = document.getElementById('input_email');
+        const ip_phone = document.getElementById('input_phone');
+
+        if(ip_id.value.length < 3) {
+            alert("아이디를 3글자 이상 입력하십시오.");
+            ip_id.focus();
+            return false;
+        }
+
+        if(ip_pw.value.length < 4 || ip_pw.value.length > 30) {
+            alert("비밀번호는 4글자 이상, 30글자 이하만 이용 가능합니다.")
+            ip_pw.focus();
+            return false;
+        }
+
+        if(ip_pw.value != ip_chkpw.value) {
+            alert("패스워드가 다릅니다.")
+            ip_chkpw.focus();
+            return false;
+        }
+
+        if(ip_name.value == " ") {
+            alert("이름을 입력해주세요.")
+            ip_name.focus();
+            return false;
+        }
+
+        if(ip_email.value == " " || ip_email.value.length <1) {
+            alert("이메일을 입력해주세요.")
+            ip_email.focus();
+            return false;
+        }
+
+        if(ip_phone.value == " " || ip_phone.value.length < 1) {
+            alert("전화번호를 입력해주세요.")
+            ip_phone.focus();
+            return false;
+        }
+
+        if(confirm("회원가입 하시겠습니까?") == false) {
+            return false;
+        }
+
+        signupUser()
     }
 
     </script>
@@ -31,6 +78,7 @@
             alert('아이디 중복체크 구현 예정입니다.')
         }
         function signupUser(){
+            var renew = "";
             $.ajax({
                 type: "POST",
                 url: "/api",
@@ -40,7 +88,7 @@
                     userPw: $('#input_pw').val(),
                     userName: $('#input_name').val(),
                     userEmail: $('#input_email').val(),
-                    userPhone: $('#input_phone').val()
+                    userPhone: renew
                 },
                 success: function (response) {
                     let resultCode = response['code']
@@ -51,6 +99,7 @@
                     } else {
                         // 정상코드일 경우 여기에 코드를 작성합니다.
                         alert('회원가입이 완료되었습니다.')
+                        window.location.href = '/login'
                     }
                 }
             })
