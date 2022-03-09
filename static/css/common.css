@@ -182,6 +182,148 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 .login_wrap ul {height: 100px; display: flex; flex-flow: column nowrap; justify-content: space-between; padding-right: 15px; width: calc(100% - 100px)}
 .login_wrap ul li {}
 .login_wrap ul li:first-child  {}
+.login_wrap input {padding: 8px 12px; font-size: 16px;  border: 1px solid #fff; background: none; color: #fff;}
+.login_wrap button {font-size: 18px; text-align:center; background-color: #fff; height: 100px; width :100px}
+
+
+
+
+/* mypage */
+
+.mypageInner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-top:80px;
+    color:#fff;
+}
+
+.mypageInner .profileCont {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.mypageInner .tit {
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    font-size: 2rem;
+    border-bottom: 1px solid #fff;
+
+}
+
+/* 왼쪽 프로필 영역 */
+.leftBox {
+    padding: 0 50px 0 20px;
+    border-right: 1px solid #333;
+    min-width: 350px;
+}
+
+.leftBox .btnBox {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.leftBox .info {
+    padding-top: 10px;
+}
+
+.leftBox .profile {
+    text-align: center;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 30px;
+}
+
+.leftBox .profile img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+
+.profileCont .infoList {
+    padding-bottom: 20px;
+}
+.profileCont .infoList p{
+    padding-bottom: 10px;
+}
+
+.profileCont .withdrawal {
+    text-align: right;
+}
+
+.profileCont .withdrawal .withdrawalBtn {
+    cursor: pointer;
+}
+
+
+/* 오른쪽 게시글 영역 */
+.rightBox {
+    padding: 0 20px 0 50px;
+}
+.mypageInner .rightBox .tit{
+    width:calc(100% - 30px);
+}
+
+.mypageInner .rightBox  .col {
+    padding: 0 30px 0 0;
+}
+.mypageInner .rightBox .col a{
+    display: block;
+    color:var(--color-white);
+}
+
+.mypageInner .rightBox  .card {
+    border: 0;
+}
+
+.mypageInner .rightBox  .card-body {
+    padding-left: 0;
+    background-color:#222;
+}
+
+
+.mypageInner .rightBox .card-body .card-title{
+    font-size: 18px;
+}
+.mypageInner .rightBox .card-body .card-text{
+    font-size: 14px;
+    margin-bottom:0.5rem;
+    line-height:1.2;
+}
+.mypageInner .rightBox .card-body .card-read{
+    font-size: 12px;
+}
+
+.mypageInner .paging-div {
+    padding: 15px 0 5px 10px;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+
+/*  회원탈퇴 팝업 */
+.withdrawalModal {
+    display: none;
+}
+/* 프로필 수정 팝업 */
+.updateModal{
+    display:none;
+}
+.updateModal .infoList{
+    margin-bottom: 15px;
+}
+.updateModal .infoList:last-child{
+    margin-bottom: 0;
+}
+
+.updateModal .infoList p{
+    padding-bottom:15px;
+}
 .login_wrap ul input {padding: 8px 12px; font-size: 16px;  border: 1px solid #fff; background: none; color: #fff; width: 100%; display: block;}
 .login_wrap .login_box button {font-size: 18px; text-align:center; background-color: #fff; height: 100px; width :100px}
 

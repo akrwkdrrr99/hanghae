@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", function () {
     const hd = document.getElementById('hd');
     const bodySet = document.querySelector("body");
 
@@ -56,4 +56,32 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
+});
+
+
+// mypage script
+
+$(function () {
+    pageChk = $('.mypageInner').length;
+    if (pageChk >= 1) {
+        // 회원탈퇴 확인 팝업창
+        $('.withdrawalBtn').click(function () {
+            $('.withdrawalModal').show();
+        })
+
+        $('.withdrawalCloseBtn').click(function () {
+            $('.withdrawalModal').hide();
+        })
+
+        // 프로필 수정 팝업창
+        $('.updateBtn').click(function () {
+            $('.updateModal').show();
+        })
+
+        $('.updateModalCloseBtn').click(function () {
+            $('.updateModal').hide();
+
+        })
+
+    }
 });
