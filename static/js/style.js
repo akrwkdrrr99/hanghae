@@ -61,6 +61,36 @@ function enter_board_write() {
     window.location.href="/board_write"
 }
 
-function close_box() {
-    window.location.href="/"
+function enter_board() {
+    window.location.href="/board"
+}
+
+function enter_board_detail(index) {
+    $.ajax({
+        type: 'GET',
+        url: `/board_detail/${index}`,
+        data: {},
+        success: function (response) {
+            window.location.href=`/board_detail/${index}`
+        }
+    });
+}
+
+function move_board_detail(index) {
+    if (index != -1 && index != -2) {
+        $.ajax({
+            type: 'GET',
+            url: `/board_detail/${index}`,
+            data: {},
+            success: function (response) {
+                window.location.href = `/board_detail/${index}`
+            }
+        });
+    }
+    else if (index == -1) {
+        alert("첫번째 글입니다.")
+        
+    }else if(index == -2){
+        alert("마지막 글입니다.")
+    }
 }

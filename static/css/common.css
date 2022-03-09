@@ -195,9 +195,10 @@ th, td {
 
 .board_detail_html .title_h3 {
   /* float: left; */
-  color: red;
+  color: whitesmoke;
 
   width: 400px;
+  font-size: 25pt;
   margin-top: 11px;
   margin-left: 10px;
 
@@ -231,8 +232,8 @@ th, td {
 .board_detail_html .movie_img {
   float: left;
   margin-left: 11px;
-  width: 300px;
-  height: 300px;
+  /* width: 300px;
+  height: 300px; */
 }
 
 .board_detail_html .movie_actor_desc {
@@ -244,6 +245,7 @@ th, td {
   justify-content: right;
 }
 .board_detail_html .reply{
+  width: 100%;
   margin-top: 11px;
   margin-left: 11px;
 }

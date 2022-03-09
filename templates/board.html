@@ -36,38 +36,21 @@
                 <th scope="col">개봉일</th>
                 <th scope="col">추천수</th>
                 <th scope="col">평균별점</th>
-                <th scope="col">조회수</th>
+                <!-- <th scope="col">조회수</th> -->
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td > <a href="/board_write">Mark</a> </td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@개봉일</td>
-                <td>@추천수</td>
-                <td>@평균별점</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td><a href="/board_write">Jacob </a></td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>@fat</td>
-                <td>@fat</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <!-- <td colspan="3">Larry the Bird</td> -->
-                <td><a href="/board_write">@twitter </a></td>
-                <td>@twitter</td>
-                <td>@twitter</td>
-                <td>@twitter</td>
-                <td>@twitter</td>
-                <td>@twitter</td>
-            </tr>
+            {% for movie in all_movies%}
+                <tr>
+                    <th scope="row">{{movie.movie_arrindex}}</th>
+                    <td><a id="titlelink" href="#" onclick="enter_board_detail({{movie.movie_arrindex}})">{{movie.movie_title}} </a></td>
+                    <td>{{movie.movie_director}}</td>
+                    <td>{{movie.movie_opendate}}</td>
+                    <td>{{movie.movie_recommand}}</td>
+                    <td>{{movie.movie_avg_star}}</td>
+                    <!-- <td>{{movie.movie_opendate}}</td> -->
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
