@@ -17,12 +17,7 @@
 <div class="board_write_html">
         <div class="mypost" id="post-box">
         <div class="title_h3">
-            <h3>게시글 작성</h3>
-        </div>
-
-        <div class="form-floating mb-3">
-            <input id="user_ID" type="text" class="form-control" placeholder="">
-            <label>User_ID</label>
+            <h3 style="color : white; font-size: 25pt; margin-bottom: 15px;">게시글 작성</h3>
         </div>
 
         <div class="form-floating mb-3">
@@ -50,13 +45,13 @@
         </div>
         <div class="mypost_formfloating">
             <div class="form-floating">
-                <textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>
+                <textarea id="comment" class="form-control" placeholder=""></textarea>
                 <label for="floatingTextarea2">추천 이유</label>
             </div>
         </div>
 
         <div class="mybtns">
-            <button onclick="posting()" type="button" class="btn btn-outline-light">등록하기</button>
+            <button onclick="posting( '{{userid}}' )" type="button" class="btn btn-outline-light">등록하기</button>
             <button onclick="enter_board()" type="button" class="btn btn-outline-light">뒤로가기</button>
         </div>
     </div>

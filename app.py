@@ -217,10 +217,8 @@ def board_write():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
-
         userinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
-        return render_template('board_write.html')
+        return render_template('board_write.html',userid = userinfo['userid'])
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
         return redirect(url_for('login'))
@@ -333,7 +331,6 @@ def api():
             avg_star = (totalsum + int(star_receive)) / cur_recommand  # 기존 데이터들의 별점 합 에다가 현재 추가 하려는 데이터의 별점 추가 후 나누기
             db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_recommand': cur_recommand}})
             db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_avg_star': avg_star}})
-            return jsonify({'code': 10, 'msg': '이미 존재합니다.'})
         
         elif result is None: # 영화 데이터 X
             #먼저 영화 전체 데이터 읽어옴
@@ -378,7 +375,7 @@ def api():
             }
             db.dbmoviedata.insert_one(moviedata)
 
-            return jsonify({'code': 10, 'msg': '등록이 완료되었습니다.'})
+        return jsonify({'code': 10, 'msg': '등록되었습니다.'})
 
     else:
         return jsonify({'code': -99, 'msg': '정의되지 않은 요청코드'})
