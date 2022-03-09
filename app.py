@@ -204,9 +204,9 @@ def board_write():
         return render_template('board_write.html')
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
 
 @app.route('/board_detail/<keyword>')
 def board_detail(keyword):
