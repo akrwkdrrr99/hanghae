@@ -306,9 +306,11 @@ def api():
         soup = BeautifulSoup(data.text, 'html.parser')
 
         title = soup.select_one('meta[property="og:title"]')['content']
+        image = soup.select_one('meta[property="og:image"]')['content']
 
         user_moviedata = {
             'movie_title': title,
+            'movie_img': image,
             'user_ID' : user_ID,
             'user_star' : int(star_receive),
             'user_comment': comment_receive,
@@ -342,8 +344,7 @@ def api():
             recommand = 1 #첫 등록이므로 추천 수는 무조건 1
             #평균 별점
             avg_star = int(star_receive) #첫 등록이므로 평균 별점은 무조건 현재 별점
-            #영화 정보 크롤링
-            image = soup.select_one('meta[property="og:image"]')['content']
+            #영화 정보 크롤링 (img는 위에서 이미 처리함)
             desc = soup.select_one('meta[property="og:description"]')['content']
             releaseDates = soup.select(
                 'div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(4) > a')
