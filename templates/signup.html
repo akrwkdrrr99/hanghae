@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="join_wrap">
+    <ul class="join">
+        <li><label for="id">아이디<i>*</i></label><input type="text" id="input_id" name="input_id" maxlength="12"><button onclick="duplicateCheck()">중복확인</button></li>
+        <li><label for="input_pw">패스워드<i>*</i></label><input type="password" id="input_pw" name="input_pw" maxlength="18"></li>
+        <li><label for="input_chkpw">패스워드 확인<i>*</i></label><input type="password" name="input_chkpw" id="input_chkpw" maxlength="18"></li>
+        <li><label for="input_name">이름<i>*</i></label><input type="text" id="input_name" name="input_name" maxlength="6"></li>
+        <li><label for="input_email">이메일주소</label><input type="text" id="input_email" name="input_email"></li>
+        <li><label for="input_phone">휴대폰번호</label><input type="text" id="input_phone" name="input_phone"></li>
+    <ul>
+    <div class="btn_wrap">
+        <a href="javascript:history.back()" class="btn_type2">이전으로</a>
+        <button onclick="signupUser()" class="btn_type3">회원가입</button>
+    </div>
+    <script>
+
+        const POST_REQUEST_SIGNUP = 'postRequestSignUp'
+
+        function duplicateCheck(){
+            alert('아이디 중복체크 구현 예정입니다.')
+        }
+        function signupUser(){
+            $.ajax({
+                type: "POST",
+                url: "/api",
+                data: {
+                    reqType: POST_REQUEST_SIGNUP, // 서버에 요청할 작업
+                    userId: $('#input_id').val(),
+                    userPw: $('#input_pw').val(),
+                    userName: $('#input_name').val(),
+                    userEmail: $('#input_email').val(),
+                    userPhone: $('#input_phone').val()
+                },
+                success: function (response) {
+                    let resultCode = response['code']
+                    if (resultCode < 0) {
+                        //처리코드가 0인경우 정상, 0보다 작은 경우 오류로 약속합니다.
+                        //오류인 경우 서버에서 내려주는 메시지 그대로 보여줍니다.
+                        alert(response['msg'])
+                    } else {
+                        // 정상코드일 경우 여기에 코드를 작성합니다.
+                        alert('회원가입이 완료되었습니다.')
+
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+{% endblock %}
