@@ -1,0 +1,270 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <div class="mypageInner">
+        <!--    나의 프로필 영역-->
+        <div class="profileCont">
+            <div class="leftBox">
+                <h1 class="tit">나의 프로필</h1>
+                {#                <div class="profileBox">#}
+                {#                    <div class="profile">#}
+                {#                        <img src="https://movie-phinf.pstatic.net/20220214_120/1644825641315cvVKI_JPEG/movie_image.jpg?type=m203_290_2"#}
+                {#                             alt="프로필 사진">#}
+                {#                    </div>#}
+                {#                    <div class="btnBox">#}
+                {#                        <button type="button" class="btn btn-dark">이미지 변경</button>#}
+                {#                        <button type="button" class="btn btn-outline-secondary">이미지 삭제</button>#}
+                {#                    </div>#}
+                {#                </div>#}
+                <div class="info" id="info">
+                    {#                    <div class="infoList">#}
+                    {#                        <p class="user">계정</p>#}
+                    {#                        <p id="user"></p>#}
+                    {#                    </div>#}
+                    {#                    <div class="infoList" id="userName">#}
+                    {#                        <p class="name">이름</p>#}
+                    {#                        <p id="name"></p>#}
+                    {#                    </div>#}
+                    {#                    <div class="infoList" id="userPhone">#}
+                    {#                        <p class="phone">전화번호</p>#}
+                    {#                        <p id="phone"></p>#}
+                    {#                    </div>#}
+                    {#                    <div class="infoList" id="useremail">#}
+                    {#                        <p class="email">이메일</p>#}
+                    {#                        <p id="email"></p>#}
+                    {#                    </div>#}
+                </div>
+                <button type="button" class="btn btn-secondary updateBtn" onclick="">수정하기</button>
+                <div class="withdrawal"><span class="withdrawalBtn" onclick="">회원탈퇴</span></div>
+            </div>
+
+            <!--  // 나의 프로필 영역 -->
+
+
+            <div class="rightBox">
+                <h1 class="tit">나의 게시글</h1>
+                <div class="boardBox">
+                    <div class="container">
+                        <div class="row row-cols-1 row-cols-md-4 g-4" id="myBoard">
+                            <div class="col">
+                                <a href="#none">
+                                    <div class="card h-100" onclick="">
+                                        <img src="https://movie-phinf.pstatic.net/20220214_120/1644825641315cvVKI_JPEG/movie_image.jpg?type=m203_290_2"
+                                             class="card-img-top" alt="...">
+                                        <div class="card-body">
+                                            <h5 class="card-title">제목</h5>
+                                            <p class="card-text">내용</p>
+                                            <p class="card-read">추천수 : 34</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <section>
+                        <div id="data-container"></div>
+                        <div id="pagination"></div>
+                    </section>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- 회원탈퇴 팝업창 -->
+
+    <div class="withdrawalModal modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">회원탈퇴</h5>
+                    <button type="button" class="btn-close withdrawalCloseBtn" data-bs-dismiss="modal"
+                            aria-label="Close"
+                            onclick=""></button>
+                </div>
+                <div class="modal-body">
+                    <p>정말로 회원을 탈퇴하시겠습니까 ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary withdrawalCloseBtn" data-bs-dismiss="modal"
+                            onclick="">취소
+                    </button>
+                    <button type="button" class="btn btn-dark" onclick="">네</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 회원탈퇴 팝업창 -->
+
+    <div class="updateModal modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">프로필 수정하기</h5>
+                    <button type="button" class="btn-close updateModalCloseBtn" data-bs-dismiss="modal"
+                            aria-label="Close"
+                            onclick=""></button>
+                </div>
+                <div class="modal-body">
+                    <div class="info">
+                        <div class="infoList" id="userName">
+                            <p class="name">이름</p>
+                            <input type="text" class="form-control" value="{{ nickname }}" id="name">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary updateModalCloseBtn" data-bs-dismiss="modal"
+                            onclick="">취소
+                    </button>
+                    <button type="button" class="btn btn-dark" onclick="">수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+            boradList();
+            memberRead()
+        });
+
+        function boradList() {
+
+            $.ajax({
+                type: 'GET',
+                url: '/boardGet',
+                data: {},
+                success: function (response) {
+
+                    let rows = response['myboard']
+                    for (let i = 0; rows.length; i++) {
+                        let tit = rows[i]['name']
+                        let desc = rows[i]['address']
+
+                        let temp_html = `<div class="col">
+                                            <a href="#none">
+                                                <div class="card h-100" onclick="">
+                                                    <img src="https://movie-phinf.pstatic.net/20220214_120/1644825641315cvVKI_JPEG/movie_image.jpg?type=m203_290_2"
+                                                         class="card-img-top" alt="...">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">${tit}</h5>
+                                                        <p class="card-text">${desc}</p>
+                                                        <p class="card-read">추천수 : ${34}</p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        `
+                        $('#myBoard').append(temp_html);
+
+                    }
+                }
+            });
+
+
+            let container = $('#pagination');
+            container.pagination({
+                pageSize: 8,
+                dataSource: [
+                    {name: "hello1"},
+                    {name: "hello2"},
+                    {name: "hello3"},
+                    {name: "hello4"},
+                    {name: "hello5"},
+                    {name: "hello6"},
+                    {name: "hello7"},
+                    {name: "hello8"},
+                    {name: "hello9"},
+                    {name: "hello10"},
+                    {name: "hello11"},
+                    {name: "hello12"},
+                    {name: "hello13"},
+                    {name: "hello14"},
+                    {name: "hello15"},
+                    {name: "hello16"},
+                    {name: "hello17"},
+                ],
+                callback: function (data, pagination) {
+                    var dataHtml = '<ul>';
+
+                    $.each(data, function (index, item) {
+                        dataHtml += '<li>' + item.name + '</li>';
+                    });
+
+                    dataHtml += '</ul>';
+
+                    $("#data-container").empty();
+                    $("#data-container").append(dataHtml);
+                }
+            })
+
+
+        }
+
+        function memberRead() {
+            $.ajax({
+                type: 'GET',
+                url: '/memberRead',
+                data: {},
+                success: function (response) {
+
+                    let rows = response['memberread']
+                    let name = rows[1]['name']
+                    let phone = rows[1]['phone']
+                    let email = rows[1]['email']
+
+                    let temp_html = `<div class="info">
+                                        <div class="infoList">
+                                            <p class="user">계정</p>
+                                            <p id="user"></p>
+                                        </div>
+                                        <div class="infoList" id="userName">
+                                            <p class="name">이름</p>
+                                            <p id="name">${name}</p>
+                                        </div>
+                                        <div class="infoList" id="userPhone">
+                                            <p class="phone">전화번호</p>
+                                            <p id="phone">${phone}</p>
+                                        </div>
+                                        <div class="infoList" id="useremail">
+                                            <p class="email">이메일</p>
+                                            <p id="email">${email}</p>
+                                        </div>
+                                    </div>`
+
+                    $('#info').append(temp_html)
+                }
+            });
+        }
+
+        function member_update() {
+            let name = $('#name').val()
+            let phone = $('#phone').val()
+            let email = $('#email').val()
+
+            $.ajax({
+                type: 'POST',
+                url: '/mypageInfo',
+                data: {memberName_give: name, memberPhone_give: phone, memberEmail_give: email},
+                success: function (response) {
+                }
+            });
+        }
+
+
+    </script>
+
+
+{% endblock %}
