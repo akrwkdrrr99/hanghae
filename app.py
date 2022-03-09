@@ -42,8 +42,11 @@ def home():
     try:
         receive_token = request.cookies.get('mytoken')
         payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({'id':payload['id']})
-        return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list, user_info=user_info)
+        user_info = db.users.find_one({'userid':payload['id']})
+        if user_info is not None:
+            return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list, user_info=user_info)
+        else:
+            return redirect(url_for('login', msg="유저정보없음"))
     except jwt.ExpiredSignatureError: # 예외처리 스타트
         return redirect(url_for('login', msg="로그인 시간 만료"))
     except jwt.exceptions.DecodeError:
@@ -54,6 +57,15 @@ def home():
 def login():
     return render_template('login.html')
 
+# @app.route("/login/pwfind", methods=["GET"])
+# def login_pw_find():
+#     user_list = list(db.users.find({}, {'_id': False}))
+#     return jsonify({'users': user_list})
+#
+# @app.route("/login/idfind", methods=["GET"])
+# def login_id_find():
+#     user_list2 = list(db.users.find({}, {'_id': False}))
+#     return jsonify({'users': user_list})
 
 @app.route('/mypage')
 def mypage():
@@ -183,7 +195,7 @@ def api():
     if receive_reqtype == 'getRequestLogin':
         receive_userid = request.form['userId']
         receive_userpw = request.form['userPw']
-        result = db.users.find_one({'id': receive_userid, 'pw': receive_userpw})
+        result = db.users.find_one({'userid': receive_userid, 'userpw': receive_userpw})
 
         if result is not None:
             payload = {
