@@ -147,6 +147,14 @@ th, td {
   margin-left: 10px;
 }
 
+.board_html td a{
+  color: skyblue;
+}
+
+.board_html td a:hover{
+  color: red;
+}
+
 .board_write_html .mypost {
   width: 95%;
   max-width: 800px;
