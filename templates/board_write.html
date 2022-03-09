@@ -1,0 +1,68 @@
+
+
+{% extends "layout.html" %}
+{% block content %}
+<section id="section1">
+    <div class="main_wrap">
+        <video controls autoplay muted loop>
+            <source src="{{ url_for('static', filename='/video/theBatman.mp4') }}" type="video/mp4">
+        </video>
+        <div class="img_wrap">
+            <img src="https://movie-phinf.pstatic.net/20220302_71/1646183071913TYi4c_JPEG/movie_image.jpg?type=m665_443_2"
+                alt="대체이미지">
+        </div>
+    </div>
+</section>
+
+<div class="board_write_html">
+        <div class="mypost" id="post-box">
+        <div class="title_h3">
+            <h3>게시글 작성</h3>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input id="user_ID" type="text" class="form-control" placeholder="">
+            <label>User_ID</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input id="url" type="text" class="form-control" placeholder="">
+            <label>영화URL</label>
+        </div>
+
+        <div class="mypost_inputgroup">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupSelect01">평점</label>
+                <select class="form-select" id="star">
+                    <option selected>-- 선택하기 --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+        </div>
+        <div class="mypost_formfloating">
+            <div class="form-floating">
+                <textarea id="comment" class="form-control" placeholder="Leave a comment here"></textarea>
+                <label for="floatingTextarea2">추천 이유</label>
+            </div>
+        </div>
+
+        <div class="mybtns">
+            <button onclick="posting()" type="button" class="btn btn-outline-light">등록하기</button>
+            <button onclick="enter_board()" type="button" class="btn btn-outline-light">뒤로가기</button>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
