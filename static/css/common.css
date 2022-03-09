@@ -554,3 +554,7 @@ th, td {
   margin-top: 11px;
   margin-left: 11px;
 }
+header .login_btn button,
+header .login_btn a {margin-left: 16px; background: none;}
+header .login_btn button img,
+header .login_btn a img {width: 28px;}

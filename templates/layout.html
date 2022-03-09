@@ -36,20 +36,28 @@
                 <li><span></span></li>
               </ul>
             </div-->
-            {% if g.user %}
+            {% if user_info %}
             <div class="login_btn">
-                <!-- 로그인 전 -->
-                <a href="/mypage">
-                    <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="마이페이지">
-                </a>
                 <!-- 로그인 후 -->
-                <a href="/logout">
-                    <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="로그아웃">
+                <a href="/board">
+                    <img src="{{ url_for('static', filename='/img/gallery_w.png') }}" alt="게시판">
                 </a>
+                <a href="/mypage">
+                    <img src="{{ url_for('static', filename='/img/mypage_w.png') }}" alt="마이페이지">
+                </a>
+                <button onclick="sign_out()">
+                    <img src="{{ url_for('static', filename='/img/logout_w.png') }}" alt="로그아웃">
+                </button>
             </div>
             {% else %}
+            <!-- 로그인 전 -->
             <div class="login_btn">
-                <!-- 로그인 전 -->
+                <a href="/board">
+                    <img src="{{ url_for('static', filename='/img/gallery_w.png') }}" alt="게시판">
+                </a>
+                <a href="/mypage">
+                    <img src="{{ url_for('static', filename='/img/mypage_w.png') }}" alt="마이페이지">
+                </a>
                 <a href="/login">
                     <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="로그인">
                 </a>
@@ -64,5 +72,12 @@
     <footer id="ft">
         <div class="ft_view"></div>
     </footer>
+    <script>
+        function sign_out(e) {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!');
+            window.location.href = "/";
+         }
+    </script>
 </body>
 </html>
