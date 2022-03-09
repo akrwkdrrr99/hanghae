@@ -13,6 +13,26 @@ SECRET_KEY = "MOVIEW"
 @app.route('/')
 def home():
     receive_token = request.cookies.get('mytoken')
+    comment_list = db.dbuser_moviedata.aggregate([
+        {'$group': {'_id': '$movie_title', 'count': {'$sum':1}, 'star_avg':{'$avg':'$user_star'}}}
+        , {'$sort':{'count': -1}}
+    ])
+    comments = list(comment_list)
+
+    #메인랭크는 영화순위 중 1~3위 정보를 클라이언트에 내려준다.
+    mainrank_list = []
+    #서브랭크는 영화순위 중 1~3위 정보를 클라이언트에 내려준다.
+    subrank_list = []
+    for i in range(len(comments)):
+        movies = db.dbmoviedata.find_one({'movie_title':comments[i]['_id']}, {'_id':False})
+        if i < 3:
+            movies['movie_rank'] = i+1
+            mainrank_list.append(movies)
+        else:
+            movies['movie_rank'] = i+1
+            subrank_list.append(movies)
+
+    return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list)
 
     try:
         payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])

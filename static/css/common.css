@@ -58,13 +58,23 @@ header .menu_bt.on ul li:nth-child(1){width: 0; height: 0; margin: 0; opacity: 0
 header .menu_bt.on ul li:nth-child(2){transform: rotate(45deg); margin: 0;}
 header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg);}
 
-
+/* index */
 .main_wrap {
-  width: 100%; height: auto; position: relative;
+  width: 100%;
+  height: 800px;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+
 }
 
 .main_wrap video {
-  width: 100%;
+  width: 100vw;
+  height: auto;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
 }
 
 .main_wrap .img_wrap {
@@ -78,6 +88,83 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 .main_wrap:hover .img_wrap {
   opacity: 0;
 }
+
+.hs-area {
+  position: relative;
+  height: 120px;
+}
+
+.hs-area .index-card-box {
+  width: 100%;
+  margin-top: 500px;
+  display: flex;
+  flex-direction: column; /* row로 변경 시, 내용물이 가로로 나열됨 */
+  justify-content: center;
+  align-items: center;
+}
+
+.hs-area .index-mainrank-area {
+  position: absolute;
+  bottom: 0;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/*.hs-area .index-mainrank-area .card {*/
+/*  max-width: 450px;*/
+/*  width: 100%;*/
+/*  margin: 0 25px 0 25px;*/
+/*  display: block;*/
+/*}*/
+
+.hs-area .index-subrank-area {
+  margin-top: 200px;
+  width: 90%;
+  height: auto;
+
+}
+
+.hs-area .card-body {
+  margin-left: 30px;
+  line-height: 2.4;
+}
+.hs-area .index-subrank-area .card-body {
+  padding: 0;
+}
+
+.hs-area .index-subrank-area img {
+  display: block;
+  margin: auto;
+}
+
+.hs-area .index-subrank-area h1 {
+  font-size: 50px;
+  line-height: 2.6;
+}
+
+.hs-area {display: flex; justify-content: space-around; padding-top: 22px;}
+.hs-area .cp_box_ot {position: relative; width: 30%; height: 600px; overflow: hidden; box-shadow: 15px 10px 15px 0 rgba(0, 0, 0, 0.30);  border-radius: 30px; z-index: 10;}
+.hs-area .cp_box {position: relative; padding: 50px 38px 50px 42px; display: flex; height: 100%; border-radius: 30px; flex-flow: column nowrap; justify-content: flex-end;  overflow: hidden; cursor: pointer; transition: 0.5s all;}
+.hs-area .cp_box .blurImg {width: 100%; height: 100%; position: absolute; top:0; left:0; display: block; background: no-repeat center / cover; z-index: -1; transition: 1s all;}
+.hs-area .cp_box_ot:nth-child(2) .blurImg {}
+.hs-area .cp_box_ot:nth-child(3) .blurImg {}
+.hs-area .cp_box_ot:nth-child(4) .blurImg {}
+.hs-area .cp_box:before {content:''; position: absolute; top:0; left:0; width: 100%; height: 100%; border-radius: 30px; background-color: rgba(0,0,0, 0.62); transition: 0.5s all; display: block;}
+.hs-area .cp_box .subject {color: #fff; font-weight: bold; text-shadow: 3px 0 2px rgba(0, 0, 0, 0.35); font-size: 28px; transition: 0.5s all; position: relative; z-index:5;}
+.hs-area .cp_box .text {font-size: 16px; color: #fff; line-height: 1.5; transition: 0.75s all; overflow:hidden; z-index:5; height:0;}
+/* hover */
+.hs-area .cp_box:hover {}
+.hs-area .cp_box:hover .blurImg {filter:blur(20px);}
+.hs-area .cp_box:hover:before {background-color: rgba(255,255,255, 0.7); border: 1px solid #dfdfdf;}
+.hs-area .cp_box:hover .subject {color: #000; padding-bottom: 20px; text-shadow:none;}
+.hs-area .cp_box:hover .text {overflow:visible; height: 240px; color: #222; padding-top: 33px;}
+
+
 
 /* login */
 .login_wrap {
