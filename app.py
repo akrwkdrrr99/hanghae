@@ -22,8 +22,6 @@ SECRET_KEY = "MOVIEW"
 
 @app.route('/')
 def home():
-    receive_token = request.cookies.get('mytoken')
-
     comment_list = db.dbuser_moviedata.aggregate([
         {'$group': {'_id': '$movie_title', 'count': {'$sum':1}, 'star_avg':{'$avg':'$user_star'}}}
         , {'$sort':{'count': -1}}
@@ -42,22 +40,23 @@ def home():
         else:
             movies['movie_rank'] = i+1
             subrank_list.append(movies)
-
-    return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list)
+    # return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list)
 
     try:
+        receive_token = request.cookies.get('mytoken')
         payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({'id':payload['id']})
-        return render_template('index.html')
+        return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list, user_info=user_info)
     except jwt.ExpiredSignatureError: # 예외처리 스타트
-        return redirect(url_for('index', msg="로그인 시간 만료"))
+        return redirect(url_for('login', msg="로그인 시간 만료"))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for('index', msg="로그인 정보 x"))
+        return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list)
 
 
 @app.route('/login')
 def login():
     return render_template('login.html')
+
 
 @app.route('/mypage')
 def mypage():
@@ -147,7 +146,7 @@ def api():
         if result is not None:
             payload = {
                 'id': receive_userid,
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60)
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60*60*24)
             }
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
             return jsonify({'code': 0, 'msg': '정상입니다.', 'token': token})
