@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="mem_aree_wrap mAWrap">
+<div class="mem_aree_wrap mAWrap agree_wrap">
     <div class="agree_all">
-        <input type="checkbox" name="agree_checkbox" id="agree_checkbox3" value="전체동의"><label for="agree_checkbox3"><span></span><p>모든 방침에 동의합니다.</p></label>
+        <div class="chk_group">
+            <input type="checkbox" name="agree_checkbox" id="agree_checkbox3" value="전체동의">
+            <span></span>
+        </div>
+        <label for="agree_checkbox3"><span></span><p>모든 방침에 동의합니다.</p></label>
     </div>
     <div class="agree">
       <h3 class="title" data-lan="kr">Moview 이용약관</h4>
@@ -42,7 +46,10 @@
         <p class="date_update">최종 업데이트: 2022년 3월 10일</p>
       </div>
       <div class="agree_check_box">
-        <input type="checkbox" name="agree_checkbox" id="agree_checkbox1" class="agree_checkbox" value="이용약관"|lan="kr">
+          <div class="chk_group">
+            <input type="checkbox" name="agree_checkbox" id="agree_checkbox1" class="agree_checkbox" value="이용약관"|lan="kr">
+            <span></span>
+        </div>
         <label for="agree_checkbox1" data-lan="kr">위 이용약관에 동의합니다.</label>
       </div>
     </div>
@@ -75,9 +82,67 @@
       </div>
 
       <div class="agree_check_box">
-        <input type="checkbox" name="agree_checkbox" id="agree_checkbox2" class="agree_checkbox" value="개인정보처리방침"|lan="kr">
+        <div class="chk_group">
+            <input type="checkbox" name="agree_checkbox" id="agree_checkbox2" class="agree_checkbox" value="개인정보처리방침"|lan="kr">
+            <span></span>
+        </div>
         <label for="agree_checkbox2" data-lan="kr">위 개인정보처리방침에 동의합니다.</label>
       </div>
     </div>
+    <div class="btn_wrap">
+        <a href="javascript:history.back()" class="btn_type02">이전으로</a>
+        <a href="javascript:mem_agree_ok()" class="btn_type03">회원가입</a>
+     </div>
 </div>
+  <script>
+    function allCheckFunc( obj ) {
+      $('.agree_checkbox').prop("checked", $(obj).prop("checked") );
+    }
+    /* 체크박스 체크시 전체선택 체크 여부 */
+    function oneCheckFunc( obj ) {
+      var allObj = $("#agree_checkbox3");
+      var objName = $(obj).attr('class');
+      if( $(obj).prop("checked") ){
+        checkBoxLength = $("."+ objName ).length;
+        checkedLength = $("."+ objName+":checked").length;
+        if( checkBoxLength == checkedLength ) {
+          allObj.prop("checked", true);
+        } else {
+          allObj.prop("checked", false);
+        }
+      } else {
+        allObj.prop("checked", false);
+      }
+    }
+    $(function(){
+      $("#agree_checkbox3").click(function(){
+        allCheckFunc( this );
+      });
+      $('.agree_checkbox').each(function(){
+        $(this).click(function(){
+          oneCheckFunc( $(this) );
+        });
+      });
+    });
+
+    // 약관동의
+    var siren_url ='';
+    function mem_agree_ok(siren_mode){
+        if(!siren_mode) siren_mode ='';
+        if(document.getElementsByName("agree_checkbox").length){
+            for(var i=0;i<document.getElementsByName('agree_checkbox').length;i++){
+                if(document.getElementsByName('agree_checkbox')[i].checked == false){
+                    alert(document.getElementsByName('agree_checkbox')[i].value + "에 동의하셔야 회원가입을 하실 수 있습니다.\n\n동의에 체크해 주시기 바랍니다.");
+                    document.getElementsByName('agree_checkbox')[i].focus();
+                    return;
+                } else {
+                    window.location.href = '/signup'
+                }
+            }
+        }
+    }
+
+
+
+  </script>
 {% endblock %}

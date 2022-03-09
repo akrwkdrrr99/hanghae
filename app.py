@@ -1,7 +1,7 @@
 import jwt
 import datetime
 
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 app = Flask(__name__)
 
 from pymongo import MongoClient
@@ -15,17 +15,6 @@ SECRET_KEY = "MOVIEW"
 @app.route('/')
 def home():
     receive_token = request.cookies.get('mytoken')
-<<<<<<< HEAD
-    return render_template('index.html')
-    # try:
-    #     payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
-    #     user_info = db.users.find_one({'id':payload['id']})
-    #     return render_template('index.html')
-    # except jwt.ExpiredSignatureError: # 예외처리 스타트
-    #     return redirect(url_for('index', msg="로그인 시간 만료"))
-    # except jwt.exceptions.DecodeError:
-    #     return redirect(url_for('index', msg="로그인 정보 x"))
-=======
 
     comment_list = db.dbuser_moviedata.aggregate([
         {'$group': {'_id': '$movie_title', 'count': {'$sum':1}, 'star_avg':{'$avg':'$user_star'}}}
@@ -47,6 +36,7 @@ def home():
             subrank_list.append(movies)
 
     return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list)
+
     try:
         payload = jwt.decode(receive_token, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({'id':payload['id']})
@@ -55,13 +45,11 @@ def home():
         return redirect(url_for('index', msg="로그인 시간 만료"))
     except jwt.exceptions.DecodeError:
         return redirect(url_for('index', msg="로그인 정보 x"))
->>>>>>> a536a9ab5f7dfbc87aede91197c8d5212593f142
 
 @app.route('/login')
 def login():
     return render_template('login.html')
 
-<<<<<<< HEAD
 @app.route('/mypage')
 def mypage():
     return render_template('mypage.html')
@@ -93,16 +81,13 @@ def web_mars_post():
     db.teamtest.insert_one(doc)
     return jsonify({'msg': '수정 완료 !'})
 
-
-=======
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
 
-@app.route('/mem_area')
+@app.route('/memaree')
 def memup():
-    return render_template('mem_area.html')
->>>>>>> a536a9ab5f7dfbc87aede91197c8d5212593f142
+    return render_template('memaree.html')
 
 @app.route('/api', methods=["POST"])
 def api():

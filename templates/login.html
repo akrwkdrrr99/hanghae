@@ -16,12 +16,12 @@
             </label>
         </div>
         <div class="lp_right">
-            <a href="#" id="id_find_btn">아이디 찾기</a>
-            <a href="#" id="pw_find_btn">비밀번호찾기</a>
+            <a href="#" class="id_find">아이디 찾기</a>
+            <a href="#" class="pw_find">비밀번호찾기</a>
         </div>
     </div>
     <div class="lp_btm">
-        <a href="/mem_area">회원가입</a>
+        <a href="/memaree">회원가입</a>
     </div>
     <script>
         // 서버에 요청할 작업을 상수로 정의해서 상수값과 같이 요청합니다.
@@ -53,5 +53,52 @@
         }
     </script>
 </div>
-<div class="pop_up_layer"></div>
+<div class="popup_area">
+    <div class="pop_inner">
+      <a href="#" class="p_close"></a>
+      <div class="pop_up_box">
+        <div class="findId id_find_PopUp">
+            <form class="find_id_form" name="find_id_form" method="post" action="">
+                  <ul class="top">
+                    <li>
+                        <input type="text" name="user_name" placeholder="Name">
+                    </li>
+                    <li class="e-mail">
+                          <input type="text" name="user_mail" placeholder="E-mail">
+                    </li>
+                  </ul>
+                  <div class="certificate_code">
+                        <input type="password" name="certificate_code" placeholder="인증번호를 입력하세요">
+                        <button type="button">확인</button>
+                  </div>
+                    <div class="mid check">
+                        <button type="button" onclick="form_check();">확인</button>
+                    </div>
+              </form>
+        </div>
+        <div class="findpw pw_find_PopUp">
+            <form class="find_pw_form" name="find_pw_form" method="post" action="">
+                  <ul class="top">
+                    <li>
+                        <input type="text" name="user_name" placeholder="Name">
+                    </li>
+                    <li>
+                        <input type="text" name="user_id" placeholder="ID">
+                    </li>
+                    <li class="e-mail">
+                          <input type="text" name="user_mail" placeholder="E-mail">
+                    </li>
+                  </ul>
+                  <div class="certificate_code">
+                        <input type="password" name="certificate_code_p" placeholder="인증번호를 입력하세요">
+                        <button type="button">확인</button>
+                  </div>
+                    <div class="mid check">
+                        <button type="button" onclick="form_check();">확인</button>
+                    </div>
+              </form>
+        </div>
+      </div>
+    </div>
+</div>
 {% endblock %}
