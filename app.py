@@ -84,74 +84,87 @@ def board_get():
     myboard = list(db.dbmoviedata.find({}, {'_id': False}))
     return jsonify({'myboard': myboard})
 
+
     #회원 정보 데이터베이스 클라이언트로 내려주기
 @app.route("/memberRead", methods=["GET"])
 def member_read():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # print(payload)
+
+        myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        # print(myinfo)
+        return jsonify({'myinfo': myinfo})
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return redirect(url_for('home'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('home'))
+
+
     memberread = list(db.users.find({}, {'_id': False}))
     return jsonify({'memberread': memberread})
+
 
     # 개인정보 수정을 위한 로그인한 본인의 정보 데이터베이스 확인 및 수정
 @app.route("/mypageInfo", methods=["POST"])
 def user_update():
-    # token_receive = request.cookies.get('mytoken')
-    #
-    # # try / catch 문?
-    # # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-    #
-    # try:
-    #     # token을 시크릿키로 디코딩합니다.
-    #     # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
-    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    #     print(payload)
-    #
-    #     # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-    #     # 여기에선 그 예로 닉네임을 보내주겠습니다.
-    #     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-    #     return jsonify({'result': 'success', 'nickname': userinfo['nick']})
-    # except jwt.ExpiredSignatureError:
-    #     # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-    #     return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
-    # except jwt.exceptions.DecodeError:
-    #     return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
-
     # 개인정보 수정 요청온 값.
-    # memberId_receive = request.form['memberId_give']
     memberName_receive = request.form['memberName_give']
     memberPhone_receive = request.form['memberPhone_give']
     memberEmail_receive = request.form['memberEmail_give']
+    print(memberEmail_receive, memberPhone_receive, memberName_receive)
 
-    # 내 개인정보 찾아서 수정하기
-    db.users.update_one({'name': ''}, {'$set': {'username': memberName_receive}})
-    db.users.update_one({'name': ''}, {'$set': {'userphone': memberPhone_receive}})
-    db.users.update_one({'name': ''}, {'$set': {'useremail': memberEmail_receive}})
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
 
+        myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        print(myinfo)
+        myname = myinfo['username']
+        myphone = myinfo['userphone']
+        myemail = myinfo['useremail']
+
+        # 내 개인정보 찾아서 수정하기
+        db.users.update_one({'username': myname}, {'$set': {'username': memberName_receive}})
+        db.users.update_one({'userphone': myphone}, {'$set': {'userphone': memberPhone_receive}})
+        db.users.update_one({'useremail': myemail}, {'$set': {'useremail': memberEmail_receive}})
+
+        myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        print(myinfo)
+        return jsonify({'msg': '수정 완료 !'})
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return redirect(url_for('home'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('home'))
     return jsonify({'msg': '수정 완료 !'})
 
 
 @app.route("/userDelete", methods=["POST"])
 def user_delete():
+    memberName_receive = request.form['userId_give']
+    print(memberName_receive, ' << 받아온 아이디값')
     token_receive = request.cookies.get('mytoken')
-
-    # try / catch 문?
-    # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-
     try:
-        # token을 시크릿키로 디코딩합니다.
-        # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         print(payload)
 
-        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-        # 여기에선 그 예로 닉네임을 보내주겠습니다.
-        userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-        return jsonify({'result': 'success', 'nickname': userinfo['nick']})
+        myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        print(myinfo)
+        myid = myinfo['userid']
+        db.users.delete_one({'userid': myid})
+
+        return jsonify({'msg': '회원 탈퇴 되었습니다. 감사합니다.'})
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
+        return redirect(url_for('home'))
     except jwt.exceptions.DecodeError:
-        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+        return redirect(url_for('home'))
 
-    return jsonify({'msg': '회원탈퇴 되었습니다. 감사합니다.'})
+
 
 @app.route('/signup')
 def signup():
@@ -210,9 +223,9 @@ def board_write():
         return render_template('board_write.html')
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     except jwt.exceptions.DecodeError:
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
 
 @app.route('/board_detail/<keyword>')
 def board_detail(keyword):

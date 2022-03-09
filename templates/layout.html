@@ -21,6 +21,7 @@
     <script src="{{ url_for('static', filename='/js/jquery.twbsPagination.js') }}" type="text/javascript"></script>
 
 </head>
+
 <body>
     <header id="hd">
         <div class="inner">
@@ -38,33 +39,8 @@
                 <li><span></span></li>
               </ul>
             </div-->
-            {% if user_info %}
-            <div class="login_btn">
-                <!-- 로그인 후 -->
-                <a href="/board">
-                    <img src="{{ url_for('static', filename='/img/gallery_w.png') }}" alt="게시판">
-                </a>
-                <a href="/mypage">
-                    <img src="{{ url_for('static', filename='/img/mypage_w.png') }}" alt="마이페이지">
-                </a>
-                <button onclick="sign_out()">
-                    <img src="{{ url_for('static', filename='/img/logout_w.png') }}" alt="로그아웃">
-                </button>
+            <div class="login_btn" id="login_btn">
             </div>
-            {% else %}
-            <!-- 로그인 전 -->
-            <div class="login_btn">
-                <a href="/board">
-                    <img src="{{ url_for('static', filename='/img/gallery_w.png') }}" alt="게시판">
-                </a>
-                <a href="/mypage">
-                    <img src="{{ url_for('static', filename='/img/mypage_w.png') }}" alt="마이페이지">
-                </a>
-                <a href="/login">
-                    <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="로그인">
-                </a>
-            </div>
-            {% endif %}
         </div>
     </header>
     <div class="wrapper">
@@ -75,9 +51,56 @@
         <div class="ft_view"></div>
     </footer>
     <script>
+
+        $(document).ready(function () {
+            let temp_html = ``
+            if (getCookie('mytoken') != ""){
+                temp_html = `<a href="/board">
+                                <img src="{{ url_for('static', filename='/img/gallery_w.png') }}" alt="게시판">
+                            </a>
+                            <a href="/mypage">
+                                <img src="{{ url_for('static', filename='/img/mypage_w.png') }}" alt="마이페이지">
+                            </a>
+                            <button onclick="sign_out()">
+                                <img src="{{ url_for('static', filename='/img/logout_w.png') }}" alt="로그아웃">
+                            </button>`
+            }else{
+                temp_html = `<a href="/board">
+                                <img src="{{ url_for('static', filename='/img/gallery_w.png') }}" alt="게시판">
+                            </a>
+                            <a href="/mypage">
+                                <img src="{{ url_for('static', filename='/img/mypage_w.png') }}" alt="마이페이지">
+                            </a>
+                            <a href="/login">
+                                <img src="{{ url_for('static', filename='/img/login_w.png') }}" alt="로그인">
+                            </a>`
+            }
+            $('#login_btn').append(temp_html)
+        });
+
+        function getCookie(name) { //가져올 쿠키의 이름을 파라미터 값으로 받고
+            var nameOfCookie = name + "="; //쿠키는 "쿠키=값" 형태로 가지고 있어서 뒤에 있는 값을 가져오기 위해 = 포함
+            var x = 0;
+            while (x <= document.cookie.length) {  //현재 세션에 가지고 있는 쿠키의 총 길이를 가지고 반복
+                var y = (x + nameOfCookie.length); //substring으로 찾아낼 쿠키의 이름 길이 저장
+                if (document.cookie.substring(x, y) == nameOfCookie) { //잘라낸 쿠키와 쿠키의 이름이 같다면
+                    if ((endOfCookie = document.cookie.indexOf(";", y)) == -1) //y의 위치로부터 ;값까지 값이 있으면
+                        endOfCookie = document.cookie.length; //쿠키의 길이로 적용하고
+                    return unescape(document.cookie.substring(y, endOfCookie)); //쿠키의 시작점과 끝점을 찾아서 값을 반환
+                }
+                x = document.cookie.indexOf(" ", x) + 1; //다음 쿠키를 찾기 위해 시작점을 반환
+                if (x == 0) //쿠키 마지막이면
+                    break; //반복문 빠져나오기
+            }
+            return ""; //빈값 반환
+        }
+
         function sign_out() {
+            alert(getCookie('mytoken'))
             $.removeCookie('mytoken', {path: '/'});
+            alert(getCookie('mytoken'))
             alert('로그아웃!');
+
             window.location.href = "/";
          }
     </script>
