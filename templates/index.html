@@ -23,7 +23,7 @@
                             <div class="blurImg" style="background-image: url('{{ mainrank.movie_image }}')"></div>
                             <div class="subject">
                                 <h1 style="text-align: right; font-size:56px; font-weight: bold;">{{ mainrank.movie_rank }}위</h1>
-                                <p>{{mainrank.movie_title}}({{ mainrank.movie_avg_star }}점)</p>
+                                <p class="txt_line">{{mainrank.movie_title}}({{ mainrank.movie_avg_star }}점)</p>
                             </div>
                             <div class="text tits">
                                 <p>줄거리 : {{mainrank.movie_desc}}</p>
@@ -47,7 +47,7 @@
                             </div>
                             <div class="col-md-10">
                                 <div class="card-body">
-                                    <h1 class="card-title text-white">{{ subrank.movie_rank }}위 : {{subrank.movie_title}}({{ subrank.movie_avg_star }}점)</h1>
+                                    <h1 class="card-title text-white txt_line">{{ subrank.movie_rank }}위 : {{subrank.movie_title}}({{ subrank.movie_avg_star }}점)</h1>
                                     <p class="card-text text-white">줄거리 : {{subrank.movie_desc}}</p>
                                     <p class="card-text text-white">감독 : {{subrank.movie_director}}</p>
                                     <p class="card-text text-white">출연 : {{subrank.movie_actor}}</p>
