@@ -82,16 +82,35 @@ def user_id_get():
     users_list = list(db.users.find({}, {'_id': False}))
     return jsonify({'users': users_list})
 
+@app.route("/login/idfind", methods=["POST"])
+def login_id_find():
+    l_i_find_data1 = request.form['userName']
+    l_i_find_data2 = request.form['userEmail']
+    same_names = list(db.users.find({'username':l_i_find_data1}, {'_id': False}))
 
-# @app.route("/login/pwfind", methods=["GET"])
-# def login_pw_find():
-#     user_list = list(db.users.find({}, {'_id': False}))
-#     return jsonify({'users': user_list})
-#
-# @app.route("/login/idfind", methods=["GET"])
-# def login_id_find():
-#     user_list2 = list(db.users.find({}, {'_id': False}))
-#     return jsonify({'users': user_list})
+    if (len(same_names) < 1):
+        return jsonify({'msg': '등록된 이름이 없습니다.'})
+    elif (len(same_names) > 1):
+        for user_s_list in same_names:
+            if(user_s_list['useremail'] == l_i_find_data2):
+                msg = "아이디는 다음과 같습니다." + user_s_list['userid']
+            else:
+                msg = "등록된 이메일이 아닙니다."
+        return jsonify({'msg':  msg})
+    else:
+        return jsonify({'msg': "아이디는 다음과 같습니다." + same_names[0]['userid']})
+
+@app.route("/login/pwfind", methods=["POST"])
+def login_pw_find():
+    l_pw_find_data1 = request.form['userId']
+    l_pw_find_data2 = request.form['userName']
+    l_pw_find_data3 = request.form['userEmail']
+    pw_set = db.users.find_one({'userid':l_pw_find_data1}, {'_id': False})
+
+    if (pw_set['username'] == l_pw_find_data2) and pw_set['useremail'] == l_pw_find_data3 :
+        return jsonify({'msg': '비밀번호는 ' + pw_set['userpw'] + "입니다."})
+    else:
+        return jsonify({'msg': '정보를 다시확인해주세요.'})
 
 @app.route('/mypage')
 def mypage():
@@ -143,7 +162,6 @@ def member_read():
         return redirect(url_for('home'))
     except jwt.exceptions.DecodeError:
         return redirect(url_for('home'))
-
 
     memberread = list(db.users.find({}, {'_id': False}))
     return jsonify({'memberread': memberread})

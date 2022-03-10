@@ -355,7 +355,8 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 .login_wrap ul input {padding: 8px 12px; font-size: 16px;  border: 1px solid #fff; background: none; color: #fff; width: 100%; display: block;}
 .login_wrap .login_box button {font-size: 18px; text-align:center; background-color: #fff; height: 100px; width :100px}
 
-.login_wrap .login_plus {display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0; color: #fff; width: 90%;;}
+.login_wrap .login_plus {display: flex; justify-content: flex-end; align-items: center; padding: 12px 0 0; color: #fff; width: 90%;;}
+.login_wrap .login_plus .lp_left {display: none;}
 .login_wrap .login_plus .lp_left label {cursor:pointer;}
 .login_wrap .login_plus .lp_left label span {position: relative; padding-left: 16px;}
 .login_wrap .login_plus .lp_left label span:after {position: absolute; left: 0; top:50%; transform: translateY(-50%); border: 1px solid #fff;  content:''; width :12px; height: 12px; transition: 0.35s all;}
@@ -414,8 +415,8 @@ body.setof {overflow: hidden; height: 100%;}
 .popup_area.show {opacity: 1; z-index: 200;}
 .pop_inner {display: flex; justify-content: center; align-items: center; position: relative; width: 90%; max-width: 800px; height :auto; max-height: 600px; padding-top: 40px;}
 .pop_inner .p_close {display: block; position: absolute; top:0; right: -40px; width :36px; height: 38px; background:url('../img/popup_close.png') no-repeat center / cover;}
-.pop_inner .pop_up_box {width: 100%; height: auto; min-height: 350px; overflow-x: hidden; overflow-y: scroll; background-color: #fff; padding: 59px 15px; border: 1px solid #000; box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.3);}
-.pop_inner .pop_up_box > div  {padding: 0 44px; height: 100%; display:none;}
+.pop_inner .pop_up_box {display: flex; align-items:center; justify-content: center;width: 100%; height: auto; min-height: 350px; overflow-x: hidden; overflow-y: scroll; background-color: #fff; padding: 59px 15px; border: 1px solid #000; box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.3);}
+.pop_inner .pop_up_box > div  {padding: 0 44px; width: 100%; height: 100%; display:none;}
 .pop_inner .pop_up_box > div::-webkit-scrollbar,
 .qna_frm .scr_p_box::-webkit-scrollbar {width: 3px; display:block;}
 .pop_inner .pop_up_box > div::-webkit-scrollbar-track,
@@ -425,7 +426,7 @@ body.setof {overflow: hidden; height: 100%;}
 
  .pop_inner .pop_up_box form li {margin-bottom: 10px;}
  .pop_inner .pop_up_box form input {display: block; width :100%; height: 48px;  font-size: 16px; padding: 0px 12px; line-height: 46px}
- .pop_inner .pop_up_box form .certificate_code {display: flex;}
+ .pop_inner .pop_up_box form .certificate_code {display: flex; display: none;}
  .pop_inner .pop_up_box form .certificate_code input {width: calc(100% - 82px); margin-right: 12px;}
  .pop_inner .pop_up_box form .certificate_code button {display: block; width: 70px; line-height: 48px; background-color: #222; color: #fff;}
  .pop_inner .pop_up_box form .check {margin-top: 22px; text-align: center;}
