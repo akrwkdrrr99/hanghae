@@ -55,7 +55,7 @@
         $(document).ready(function () {
             let temp_html = ``
             if (getCookie('mytoken') != ""){
-                temp_html = `<a href="/board">
+                temp_html = `<a href="/board/1">
                                 <img src="{{ url_for('static', filename='/img/gallery_w.png') }}" alt="게시판">
                             </a>
                             <a href="/mypage">
@@ -65,7 +65,7 @@
                                 <img src="{{ url_for('static', filename='/img/logout_w.png') }}" alt="로그아웃">
                             </button>`
             }else{
-                temp_html = `<a href="/board">
+                temp_html = `<a href="/board/1">
                                 <img src="{{ url_for('static', filename='/img/gallery_w.png') }}" alt="게시판">
                             </a>
                             <a href="/mypage">
