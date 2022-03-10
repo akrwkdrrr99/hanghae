@@ -23,13 +23,16 @@
     <div class="title_h3">
         <h3>{{movie_title}}</h3>
     </div>
-
     <div class="title_h3_sub_info">
-        <h6>감독 : {{movie_director}}</h6>
-        <h6>개봉일 : {{movie_opendate}}</h6>
-        <h6>MW 유저 평균 평점 : {{movie_avg_star}}</h6>
-        <h6>추천 수 : {{movie_recommand}}</h6>
-        <!-- <h6>조회 수</h6> -->
+        <div class="t_h_top">
+            <span>감독 : {{movie_director}}</span>
+            <span>개봉일 : {{movie_opendate}}</span>
+        </div>
+        <div class="t_h_btm">
+            <span>MW 유저 평균 평점 : {{movie_avg_star}}</span>
+            <span>추천 수 : {{movie_recommand}}</span>
+            <!-- <h6>조회 수</h6> -->
+        </div>
     </div>
 
     <div class="main_contents">
@@ -37,14 +40,15 @@
             <img src= {{movie_image}}
                 class="img-thumbnail" alt="...">
         </div>
+
         <div class="movie_actor_desc">
-            <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card border-dark mb-3">
                 <div class="card-body text-dark">
                     <h5 class="card-title">줄거리</h5>
                     <p class="card-text">{{movie_desc}}</p>
                 </div>
             </div>
-            <div class="card border-dark mb-3" style="max-width: 18rem;">
+            <div class="card border-dark mb-3">
                 <div class="card-body text-dark">
                     <h5 class="card-title">출연 배우</h5>
                     <p class="card-text">{{movie_actor}}</p>
