@@ -122,7 +122,9 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 /*}*/
 
 .hs-area .index-subrank-area {
-    margin-top: 200px;
+    position: absolute;
+    top: 0%;
+    margin-top: 150px;
     width: 90%;
     height: auto;
 }
@@ -162,6 +164,10 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 .hs-area .cp_box:hover .subject {color: #000; padding-bottom: 20px; text-shadow:none;}
 .hs-area .cp_box:hover .text {overflow:visible; height: 240px; color: #222; padding-top: 33px;}
 
+.hs-area .txt_line {
+    width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
 #remote-btn {
     /*display: none; !* Hidden by default *!*/
     position: fixed; /* Fixed/sticky position */
@@ -181,6 +187,7 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 #remote-btn:hover {
   background-color: #555; /* Add a dark-grey background on hover */
 }
+
 
 
 

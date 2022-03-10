@@ -19,17 +19,38 @@ SECRET_KEY = "MOVIEW"
 
 @app.route('/')
 def home():
+    # DB에서 한번에 값을 가지고 내려올 수는 없는건가?
+
+    # DB에서 전체 코멘트 수를 조회.
+    total_comment_cnt_list = db.dbuser_moviedata.aggregate([
+        {'$group': {'_id': 'null', 'count': {'$sum': 1}}}
+    ])
+    total_comment_cnt = list(total_comment_cnt_list)[0]['count']
+
+    # DB에서 영화를 기준으로 집계하여 각 영화별 UserComment 수와 평균별점을 조회.
     comment_list = db.dbuser_moviedata.aggregate([
-        {'$group': {'_id': '$movie_title', 'count': {'$sum':1}, 'star_avg':{'$avg':'$user_star'}}}
-        , {'$sort':{'count': -1}}
+        {'$group': {'_id': '$movie_title', 'count': {'$sum': 1}, 'star_avg': {'$avg': '$user_star'}}}
+        , {'$sort': {'count': -1, 'star_avg': -1, 'open_date': 1}}
     ])
     comments = list(comment_list)
+
+    # # 각 (영화별 코멘트 수 / 전체 영화 코멘트 수) * 100 하여 백분율로 점수생성 후 총 점수 계산하여 리스트생성
+    # arr_moviesranks = []
+    # for comment in comments:
+    #
+    #     comment_percentage = int(comment['count'])/int(total_comment_cnt) * 100
+    #     comment['comment_percentage'] = comment_percentage
+    #     comment['movie_rank_point'] = comment_percentage + comment['star_avg']
+    #     arr_moviesranks.append(comment)
+    #
+    # arr_sort_movierank = sorted(arr_moviesranks, key=lambda rank:(rank['movie_rank_point']), reverse=True)
 
     #메인랭크는 영화순위 중 1~3위 정보를 클라이언트에 내려준다.
     mainrank_list = []
     #서브랭크는 영화순위 중 1~3위 정보를 클라이언트에 내려준다.
     subrank_list = []
-    for i in range(len(comments)):
+    for i in range(0, 10):
+
         movies = db.dbmoviedata.find_one({'movie_title':comments[i]['_id']}, {'_id':False})
         if i < 3:
             movies['movie_rank'] = i+1
@@ -37,7 +58,6 @@ def home():
         else:
             movies['movie_rank'] = i+1
             subrank_list.append(movies)
-    # return render_template('index.html', mainrank_list=mainrank_list, subrank_list=subrank_list)
 
     try:
         receive_token = request.cookies.get('mytoken')

@@ -95,10 +95,8 @@
         }
 
         function sign_out() {
-            alert(getCookie('mytoken'))
             $.removeCookie('mytoken', {path: '/'});
-            alert(getCookie('mytoken'))
-            alert('로그아웃!');
+            alert('로그아웃 되었습니다.');
 
             window.location.href = "/";
          }
