@@ -19,13 +19,6 @@ SECRET_KEY = "MOVIEW"
 
 @app.route('/')
 def home():
-    # DB에서 한번에 값을 가지고 내려올 수는 없는건가?
-
-    # DB에서 전체 코멘트 수를 조회.
-    total_comment_cnt_list = db.dbuser_moviedata.aggregate([
-        {'$group': {'_id': 'null', 'count': {'$sum': 1}}}
-    ])
-    total_comment_cnt = list(total_comment_cnt_list)[0]['count']
 
     # DB에서 영화를 기준으로 집계하여 각 영화별 UserComment 수와 평균별점을 조회.
     comment_list = db.dbuser_moviedata.aggregate([
@@ -391,8 +384,9 @@ def api():
                 'id': receive_userid,
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60*60*24)
             }
-            token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
+            token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+            #서버와 로컬의 파이썬의 버전이 다르므로, 로컬에서 실행 시 아래 코드를 사용해야한다.
+            # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
             return jsonify({'code': 0, 'msg': '정상입니다.', 'token': token})
 
         else:
