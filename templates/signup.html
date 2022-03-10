@@ -11,7 +11,7 @@
             <li><label for="input_pw">패스워드<i>*</i></label><input type="password" id="input_pw" name="input_pw" maxlength="30"></li>
             <li><label for="input_chkpw">패스워드 확인<i>*</i></label><input type="password" name="input_chkpw" id="input_chkpw" maxlength="30"></li>
             <li><label for="input_name">이름<i>*</i></label><input type="text" id="input_name" name="input_name" maxlength="10"></li>
-            <li><label for="input_email">이메일주소</label><input type="text" id="input_email" name="input_email" onchange="emailValidator(this.value)"></li>
+            <li><label for="input_email">이메일주소<i>*</i></label><input type="text" id="input_email" name="input_email" onchange="emailValidator(this.value)"></li>
             <li><label for="input_phone">휴대폰번호</label><input type="text" id="input_phone" name="input_phone" placeholder="-없이 입력해주세요." onchange="telValidator(this.value)"></li>
         <ul>
         <div class="btn_wrap">
@@ -84,13 +84,6 @@
             if(ip_email.value == " " || ip_email.value.length <1) {
                 alert("이메일을 입력해주세요.")
                 ip_email.focus();
-                return false;
-            }
-
-            if(ip_phone.value == " " || ip_phone.value.length < 1 ) {
-                alert("전화번호를 입력해주세요.")
-                ip_phone.focus();
-
                 return false;
             }
 

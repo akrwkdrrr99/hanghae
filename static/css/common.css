@@ -400,11 +400,15 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 .agree_wrap .agree .chk_group,
 .agree_wrap .agree_all .chk_group{display: none;}
 .agree_wrap .agree .agree_check_box label span,
-.agree_wrap .agree_all label span {position: absolute; z-index: 3; opacity: 1; width: 16px; height: 16px;  display: block; background-color: #fff; top: 50%; left: 0; transform: translateY(-50%); transition: 0.35s all;}
+.agree_wrap .agree_all label span {position: absolute; z-index: 3; opacity: 0; width: 10px; height: 10px;  display: block; background-color: skyblue; top: 50%; left: 3px; transform: translateY(-50%); transition: 0.35s all;}
 .agree_wrap .agree .agree_check_box label,
-.agree_wrap .agree_all  label {padding-left: 23px; position: relative;}
+.agree_wrap .agree_all  label {position: relative; width: 100%; line-height: 1.5;}
+.agree_wrap .agree .agree_check_box label p,
+.agree_wrap .agree_all  label p {display: inline-block; padding-left: 8px;}
 .agree_wrap .agree .agree_check_box input,
-.agree_wrap .agree_all  input  {margin-right: 0;}
+.agree_wrap .agree_all  input  {margin-right: 0; display: inline-block;}
+.agree_wrap .agree .agree_check_box input:checked ~span,
+.agree_wrap .agree_all  input:checked ~ span {opacity: 1;}
 .agree_wrap input { width: 16px; height: 16px; border: 1px solid #dfdfdf; display: block; cursor: pointer; margin-right: 10px; background-color: #fff; }
 
 .btn_wrap {margin: 40px auto 0; display: flex; justify-content: center; }
