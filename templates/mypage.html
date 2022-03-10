@@ -143,14 +143,45 @@
         $(document).ready(function () {
             boradList();
             memberRead()
+
+
+            if (getCookie('mytoken') != "") { // 쿠키값이 있다면, 쿠키값이 없는게 아니라면
+
+            } else { // 쿠키값이 없다면, 비로그인상태라면,
+                alert('로그인이 필요합니다 !');
+                window.location.href = '/login'  //로그인 페이지로 이동
+            }
+
+            function getCookie(name) { //가져올 쿠키의 이름을 파라미터 값으로 받고
+                var nameOfCookie = name + "="; //쿠키는 "쿠키=값" 형태로 가지고 있어서 뒤에 있는 값을 가져오기 위해 = 포함
+                var x = 0;
+                while (x <= document.cookie.length) {  //현재 세션에 가지고 있는 쿠키의 총 길이를 가지고 반복
+                    var y = (x + nameOfCookie.length); //substring으로 찾아낼 쿠키의 이름 길이 저장
+                    if (document.cookie.substring(x, y) == nameOfCookie) { //잘라낸 쿠키와 쿠키의 이름이 같다면
+                        if ((endOfCookie = document.cookie.indexOf(";", y)) == -1) //y의 위치로부터 ;값까지 값이 있으면
+                            endOfCookie = document.cookie.length; //쿠키의 길이로 적용하고
+                        return unescape(document.cookie.substring(y, endOfCookie)); //쿠키의 시작점과 끝점을 찾아서 값을 반환
+                    }
+                    x = document.cookie.indexOf(" ", x) + 1; //다음 쿠키를 찾기 위해 시작점을 반환
+                    if (x == 0) //쿠키 마지막이면
+                        break; //반복문 빠져나오기
+                }
+                return ""; //빈값 반환
+            }
+
+
         });
 
-        $('#pagination-demo').twbsPagination({
-            totalPages: 35,  // 전체 page 수
-            visiblePages: 5,  // 출력될 page 수
-            onPageClick: function (event, page) {
-                $('#page-content').text('Page ' + page);
-            }
+        $('#pagination-demo').click(function () {
+            $('#pagination-demo').twbsPagination({
+                totalPages: 35,  // 전체 page 수
+                visiblePages: 5,  // 출력될 page 수
+                onPageClick: function (event, page) {
+                    $('#page-content').text('Page ' + page);
+                    // window.location.href = `/board/${page}`
+                    console.log(event, page)
+                }
+            });
         });
 
         function boradList() {
@@ -159,25 +190,25 @@
                 url: '/boardGet',
                 data: {},
                 success: function (response) {
+                    console.log(response, '게시글 데이터 찾자 !')
 
                     let rows = response['myboard']
                     for (let i = 0; rows.length; i++) {
                         let tit = rows[i]['movie_title']
-                        let desc = rows[i]['movie_desc']
-                        let thum = rows[i]['movie_image']
+                        let comment = rows[i]['user_comment']
+                        let thum = rows[i]['movie_img']
+                        let star = rows[i]['user_star']
 
-                        let temp_html = `<div class="col">
-                                            <a href="#none">
-                                                <div class="card h-100" onclick="">
+                        let temp_html = `<div class="col" onclick="clickTit(this)">
+                                                <div class="card h-100">
                                                     <img src="${thum}"
                                                          class="card-img-top" alt="...">
                                                     <div class="card-body">
-                                                        <h5 class="card-title">${tit}</h5>
-                                                        <p class="card-text">${desc}</p>
-                                                        <p class="card-read">추천수 : ${34}</p>
+                                                        <h5 class="card-title" id='cardTitle'>${tit}</h5>
+                                                        <p class="card-text">${comment}</p>
+                                                        <p class="card-read">추천수 : ${star}</p>
                                                     </div>
                                                 </div>
-                                            </a>
                                         </div>
                                         `
                         $('#myBoard').append(temp_html);
@@ -254,10 +285,48 @@
                 data: {userId_give: userId},
                 success: function (response) {
                     console.log('삭제완료')
-                    window.location.href='/'
+                    window.location.href = '/'
                 }
             });
         }
+
+
+        //           $.ajax({
+        //               type: 'POST',
+        //               url: '/mypageInfo',
+        //               data: {memberName_give: name, memberPhone_give: phone, memberEmail_give: email},
+        //               success: function (response) {
+        //                   alert(response['msg'])
+        //                   window.location.reload();
+        //               }
+        //           });
+
+
+        function clickTit(e) {
+            let clickTit = ($(e).find('.card-title').text());
+            // console.log(clickTit);
+            $.ajax({
+                type: 'POST',
+                url: '/titChk',
+                data: {title_give: clickTit},
+                success: function (response) {
+                    let rows = response['arrIndexChk']
+                    for (let i = 0; rows.length; i++) {
+                        let movieIdx = rows[i]['movie_arrindex']
+                        console.log(movieIdx)
+                        window.location.href='/board_detail/'+movieIdx
+                    }
+                }
+
+
+            })
+        }
+
+
+
+
+
+
 
 
     </script>
