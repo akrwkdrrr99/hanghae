@@ -23,102 +23,103 @@
 </script> -->
 
 <div class="board_html">
+    <div class="inner">
+        <div class="title_h3">
+            <h3> 영화 추천 게시판 </h3>
+        </div>
 
-    <div class="title_h3">
-        <h3 style="color : white; font-size: 25pt; margin-bottom: 15px;"> 영화 추천 게시판 </h3>
-    </div>
-
-    <!-- <div class="arrange_list">
-        <select class="form-select" id="sortChange" aria-label="Default select example">
-            <option selected>정렬방법</option>
-            <option value="1">별점 순</option>
-            <option value="2">추천 순</option>
-        </select>
-    </div> -->
-
-    <table class="table table-dark table-striped">
-        <thead>
-            <tr>
-                <th scope="col">글 번호</th>
-                <th scope="col">영화제목</th>
-                <th scope="col">감독</th>
-                <th scope="col">개봉일</th>
-                <th scope="col">추천수</th>
-                <th scope="col">평균별점</th>
-                <!-- <th scope="col">조회수</th> -->
-            </tr>
-        </thead>
-        <tbody>
+        <!-- <div class="arrange_list">
+            <select class="form-select" id="sortChange" aria-label="Default select example">
+                <option selected>정렬방법</option>
+                <option value="1">별점 순</option>
+                <option value="2">추천 순</option>
+            </select>
+        </div> -->
+        <script type="text/javascript">
+            $(function() {
+                var li_set = $('.bbs_td .int_num');
+                for(i=0; i<li_set.length; i++) {
+                }
+            });
+        </script>
+        <div class="bbs_tb">
+            <div class="bbs_th bbs_li">
+                <div class="li_1">글 번호</div>
+                <div class="li_2">영화제목</div>
+                <div class="li_3">감독</div>
+                <div class="li_4">개봉일</div>
+                <div class="li_5">추천수</div>
+                <div class="li_6">평균별점</div>
+                <!-- <div>조회수</div> -->
+            </div>
             {% for movie in all_movies%}
-                <tr>
-                    <th scope="row">{{movie.movie_arrindex}}</th>
-                    <td><a id="titlelink" href="#" onclick="enter_board_detail({{movie.movie_arrindex}})">{{movie.movie_title}} </a></td>
-                    <td>{{movie.movie_director}}</td>
-                    <td>{{movie.movie_opendate}}</td>
-                    <td>{{movie.movie_recommand}}</td>
-                    <td>{{movie.movie_avg_star}}</td>
-                    <!-- <td>{{movie.movie_opendate}}</td> -->
-                </tr>
+            <div class="bbs_td bbs_li">
+                    <div class="li_1 row">{{movie.movie_arrindex}}</div>
+                    <div class="li_2"><a id="titlelink" href="#" onclick="enter_board_detail({{movie.movie_arrindex}})">{{movie.movie_title}} </a></div>
+                    <div class="li_3">{{movie.movie_director}}</div>
+                    <div class="li_4">{{movie.movie_opendate}}</div>
+                    <div class="li_5">{{movie.movie_recommand}}</div>
+                    <div class="li_6 int_num">{{movie.movie_avg_star}}</div>
+                    <!-- <div>{{movie.movie_opendate}}</div> -->
+            </div>
             {% endfor %}
-        </tbody>
-    </table>
+        </div>
 
-    <div class="write_button">
-        <button type="button"  onclick="enter_board_write()" class="btn btn-outline-light">글쓰기</button>
-    </div>
+        <div class="write_button">
+            <button type="button"  onclick="enter_board_write()" class="btn btn-outline-light">글쓰기</button>
+        </div>
 
-    <div class="pagination">
-        <nav aria-label="...">
-            <ul class="pagination">
-                {% if pagenation_arr_min == cur_page_num %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                {% else  %}
-                    <li class="page-item">
-                        <a class="page-link" href="/board/{{cur_page_num-1}}" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                {% endif  %}
-
-                {% for page in pagenation_arr %}
-                    {% if page == cur_page_num %}
-                        <li class="page-item active">
-                            <a class="page-link" tabindex="-1" aria-disabled="true">{{page}}</a>
+        <div class="pagination">
+                <ul class="pagination">
+                    {% if pagenation_arr_min == cur_page_num %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
                         </li>
-                    {% else %}
+                    {% else  %}
                         <li class="page-item">
-                            <a class="page-link" href="/board/{{page}}">{{page}}</a>
+                            <a class="page-link" href="/board/{{cur_page_num-1}}" tabindex="-1" aria-disabled="true">Previous</a>
                         </li>
                     {% endif  %}
-                {% endfor %}
 
-                {% if pagenation_arr_max == cur_page_num %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
-                    </li>
-                {% else  %}
-                    <li class="page-item">
-                        <a class="page-link" href="/board/{{cur_page_num+1}}" tabindex="-1" aria-disabled="true">Next</a>
-                    </li>
-                {% endif  %}
-            </ul>
-        </nav>
-    </div>
+                    {% for page in pagenation_arr %}
+                        {% if page == cur_page_num %}
+                            <li class="page-item active">
+                                <a class="page-link" tabindex="-1" aria-disabled="true">{{page}}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="/board/{{page}}">{{page}}</a>
+                            </li>
+                        {% endif  %}
+                    {% endfor %}
 
-    <div class="serchcontents">
-        <div>
-            <select class="form-select" aria-label="Default select example" id="serch_condition">
-                <option selected>검색조건</option>
-                <option value="1">영화제목</option>
-                <option value="2">감독</option>
-                <option value="3">출연배우</option>
-            </select>
+                    {% if pagenation_arr_max == cur_page_num %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                        </li>
+                    {% else  %}
+                        <li class="page-item">
+                            <a class="page-link" href="/board/{{cur_page_num+1}}" tabindex="-1" aria-disabled="true">Next</a>
+                        </li>
+                    {% endif  %}
+                </ul>
         </div>
-        <div class="serch_inputform">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="검색어 입력" aria-label="검색어 입력"
-                    aria-describedby="button-addon2" id="serch_text_input_box">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="serch_btn()">검색</button>
+
+        <div class="serchcontents">
+            <div>
+                <select class="form-select" aria-label="Default select example" id="serch_condition">
+                    <option selected>검색조건</option>
+                    <option value="1">영화제목</option>
+                    <option value="2">감독</option>
+                    <option value="3">출연배우</option>
+                </select>
+            </div>
+            <div class="serch_inputform">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="검색어 입력" aria-label="검색어 입력"
+                        aria-describedby="button-addon2" id="serch_text_input_box">
+                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="serch_btn()">검색</button>
+                </div>
             </div>
         </div>
     </div>

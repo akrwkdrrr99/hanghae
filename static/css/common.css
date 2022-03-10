@@ -36,7 +36,7 @@
 }
 
 
-.inner {width: 1400px; margin: 0 auto;}
+.inner {width: 100%; margin: 0 auto; max-width: 1400px;}
 /* header */
 header {position: fixed; left: 0; top:0; z-index: 100; width: 100%; height:  auto;}
 header .inner {max-width : 100%; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 20px;}
@@ -378,7 +378,7 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 .join_wrap ul li input[type="text"], .join_wrap ul li input[type="password"], .join_wrap ul li select{height: 45px; border: 1px solid #dfdfdf; border-radius: 0; padding: 0 10px; font-size: 16px; font-weight: 400; color: #505050;}
 .join_wrap ul li input[type="text"]::placeholder{font-size: 14px;}
 
-.agree_wrap{width: 100%; height: auto; max-width: 1400px; margin:120px auto 0;}
+.agree_wrap{width: 100%; height: auto; max-width: 1400px; margin:120px auto 0; padding: 0 20px;}
 .agree_wrap .agree_all {display: flex; border-bottom: 1px solid #ddd; padding-bottom: 30px; font-size: 16px; color: var(--color-light-grey); margin-bottom: 30px; align-items: center;}
 .agree_wrap .agree_all input {margin-right: 5px;}
 .agree_wrap .agree{width: 100%; height: auto; margin-bottom: 80px;}
@@ -393,13 +393,11 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 .agree_wrap .agree .agree_box li{margin-top: 5px;}
 .agree_wrap .agree .agree_check_box{width: 100%; height: auto; margin-top: 20px; display: flex; align-items: center; color: #fff; position: relative; z-index: 1;}
 .agree_wrap .agree .chk_group,
-.agree_wrap .agree_all .chk_group{position: relative;}
-.agree_wrap .agree .chk_group span,
-.agree_wrap .agree_all .chk_group span {position: absolute; z-index: 3; opacity: 0; width: 10px; height: 10px;  display: block; background-color: var(--color-point-blue); top: 50%; left: 50%; transform: translate(-50%, -50%); transition: 0.35s all;}
-.agree_wrap .agree .chk_group input:checked ~ span,
-.agree_wrap .agree_all .chk_group input:checked ~ span {opacity: 1;}
+.agree_wrap .agree_all .chk_group{display: none;}
+.agree_wrap .agree .agree_check_box label span,
+.agree_wrap .agree_all label span {position: absolute; z-index: 3; opacity: 1; width: 16px; height: 16px;  display: block; background-color: #fff; top: 50%; left: 0; transform: translateY(-50%); transition: 0.35s all;}
 .agree_wrap .agree .agree_check_box label,
-.agree_wrap .agree_all  label {margin-left: 7px;}
+.agree_wrap .agree_all  label {padding-left: 23px; position: relative;}
 .agree_wrap .agree .agree_check_box input,
 .agree_wrap .agree_all  input  {margin-right: 0;}
 .agree_wrap input { width: 16px; height: 16px; border: 1px solid #dfdfdf; display: block; cursor: pointer; margin-right: 10px; background-color: #fff; }
@@ -431,12 +429,14 @@ body.setof {overflow: hidden; height: 100%;}
  .pop_inner .pop_up_box form .certificate_code button {display: block; width: 70px; line-height: 48px; background-color: #222; color: #fff;}
  .pop_inner .pop_up_box form .check {margin-top: 22px; text-align: center;}
  .pop_inner .pop_up_box form .check button {width: 120px; height: 48px; line-height: 46px; border: 1px solid #222;}
- 
-.board_html .title_h3{
-  float: left;
-  margin-top: 11px;
-  margin-left: 10px;
-  color: white;
+
+ .board_html .title_h3 {
+  /* float: left; */
+    color: whitesmoke;
+    text-align:center;
+    font-size: 36px; line-height: normal;
+    margin: 40px 0;
+    width: 100%;
 }
 
 .board_html .arrange_list{
@@ -448,11 +448,9 @@ body.setof {overflow: hidden; height: 100%;}
 }
 
 .board_html .write_button{
-  width: 100px;
-  float: right;
-  margin-right: 10px;
+  text-align:right;
+    margin-top: 30px;
 }
-
 .board_html .pagination{
   width: 100%;
   margin-top: 16px;
@@ -514,13 +512,12 @@ th, td {
 
 .board_detail_html .button_set {
   width: 100%;
-  float: right;
-  margin-top: 10px;
-
+  text-align: right;
+  margin-top: 17px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: right;
+  justify-content: flex-end;
 }
 
 .board_detail_html .button_set>button {
@@ -529,23 +526,32 @@ th, td {
 
 .board_detail_html .title_h3 {
   /* float: left; */
-  color: whitesmoke;
-
-  width: 400px;
-  font-size: 25pt;
-  margin-top: 11px;
-  margin-left: 10px;
-
+    color: whitesmoke;
+    text-align:center;
+    font-size: 36px; line-height: normal;
+    margin: 40px 0;
+    width: 100%;
 }
 
 .board_detail_html .title_h3_sub_info {
-  color: red;
-
-  display: flex;
-  flex-direction: row;
+  color: #d1d2d5;
   align-items: center;
-  justify-content: left;
+  justify-content: center;
 }
+
+.board_detail_html .title_h3_sub_info div {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 12px;
+}
+.board_detail_html .title_h3_sub_info div span {
+    margin: 0 7px; display: inline-block; position: relative;
+}
+.board_detail_html .title_h3_sub_info div span:before {
+    content:''; display: block; height:16px; width :1px; background-color: #fff;
+    position: absolute; left: -10px; top:50%; transform: translateY(-50%);
+}
+.board_detail_html .title_h3_sub_info div span:first-child:before {display: none;}
 
 .board_detail_html .title_h3_sub_info > h6 {
   margin: 3px 11px 11px 11px;
@@ -557,33 +563,71 @@ th, td {
   padding-top: 10px;
   border: 1px solid;
 
+}
+
+.board_detail_html .movie_img {
+    text-align: center;
+    margin-bottom: 12px;
+}
+.board_detail_html .movie_img img{
+    width: 100%; max-width: 400px;
+}
+
+.board_detail_html .movie_actor_desc {
+  margin: 30px auto;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
-
-.board_detail_html .movie_img {
-  float: left;
-  margin-left: 11px;
-  /* width: 300px;
-  height: 300px; */
-}
-
-.board_detail_html .movie_actor_desc {
-  margin: 0px 0px 0px 50px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: right;
-}
+.board_detail_html .movie_actor_desc >div {width: 50%; max-width: 500px; margin: 0 15px;}
+.board_detail_html .movie_actor_desc  .card-body {padding: 33px 28px; min-height: 220px;}
+.board_detail_html .movie_actor_desc  .card-title {font-size: 24px; font-weight: bold; font-color: #222; margin-bottom: 30px;}
+.board_detail_html .movie_actor_desc  .card-text {font-size: 16px; font-weight: normal font-color:#505050; line-height: 1.67;}
 .board_detail_html .reply{
-  width: 100%;
-  margin-top: 11px;
-  margin-left: 11px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px 20px;
+    max-width: 1400px;
 }
+
+.board_detail_html .reply .card {
+    margin-top: 17px;
+    font-size: 16px;
+    display: block;
+}
+.board_detail_html .reply .card .card-body {
+    padding: 30px 20px;
+}
+
+
+.board_detail_html .reply .card .card-title {
+    font-size: 20px;
+}
+
+board_detail_html .reply .card:first-child {
+    margin-top: 0;
+}
+
 header .login_btn button,
 header .login_btn a {margin-left: 16px; background: none;}
 header .login_btn button img,
 header .login_btn a img {width: 28px;}
+
+/*  ************ bbs 수정 ************ */
+.bbs_tb, .bbs_tb a {color: #fff;}
+.bbs_tb .bbs_li {display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #fff; width: 100%;}
+.bbs_tb .bbs_li > div{width: calc(100% / 6); height: 50px; line-height: 50px; text-align: center; box-sizing: border-box;}
+.bbs_tb .bbs_li .li_1 {width: 10%; text-align: center; justify-content: center;}
+.bbs_tb .bbs_li .li_2 {width: 40%; }
+.bbs_tb .bbs_li .li_3 {width: 15%;}
+.bbs_tb .bbs_li .li_4 {width: 15%;}
+.bbs_tb .bbs_li .li_5 {width: 10%;}
+.bbs_tb .bbs_li .li_6 {width: 10%;}
+.bbs_tb .bbs_th{border-top: 2px solid var(--color-point-blue);}
+.bbs_tb .bbs_th > div{}
+.bbs_tb .bbs_td {}
+.bbs_tb .bbs_td:hover {background-color: rgba(255,255,255, 0.54);}
+.bbs_tb .bbs_td > div{}
+.bbs_tb .bbs_td .li_2 {text-align: left;}
+.bbs_tb .bbs_td .li_2 a {padding-left: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; width: 100%;}
