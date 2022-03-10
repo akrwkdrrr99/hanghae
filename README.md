@@ -13,8 +13,8 @@
 - 4인 1조 팀 프로젝트
   + 박형기 : 게시글 관련 페이지
   + 김원희 : 마이페이지
-  + 유학선 : Main_index 페이지
-  + 김승균 : 로그인 페이지 및 화면들 기본 Layout
+  + 유학선 : Main_index 페이지, 페이지 구조 설계
+  + 김승균 : 로그인 페이지 및 화면들 기본 Layout.html 제작
 
 <br>
 
@@ -39,7 +39,8 @@
 ## 3. 실행화면
 
 <img src="https://media-sparta.s3.amazonaws.com/media/tempvideos/20220310/%EC%8D%B8%EB%84%A4%EC%9D%BC_42.png">
-자세한 영상 : <b>추후 추가 예정 !</b>
+
+자세한 영상 : <b>https://youtu.be/_1Q7TSXGmMw</b>
 
 <br>
 
@@ -67,5 +68,14 @@
 
 <br>
 
-## 5. 개인 회고
+## 5. 우리 팀이 해결한 문제
+1. 게시글 페이지 네이션
+  - mongoDB 기본 함수 중에 skip() 및 limit() 사용해서 페이지를 구현
+  (참고 자료 : https://www.codementor.io/@arpitbhayani/fast-and-efficient-pagination-in-mongodb-9095flbqr)
+2. ID , 비밀번호 찾기 
+  - 다른 사이트들의 ID,비밀번호 찾기를 직접 해보면서 우리가 어떻게 구현할지 고민
+
+<br>
+
+## 6. 개인 회고
 : <b>추후 추가 예정 !</b>
