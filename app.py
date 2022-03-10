@@ -422,21 +422,22 @@ def api():
         # print(user_moviedata)
         db.dbuser_moviedata.insert_one(user_moviedata)
 
+        # print(result)
         
         if result is not None: # 이미 영화 데이터가 존재
             totalsum = 0
-            avg_star = 0
+            avg_star_string = ""
             #기존 DB 검색
             all_user_moviedata = list(db.dbuser_moviedata.find({'movie_title': title}, {'_id': False}))
             #추천 수 변경
-            pre_recommand = len(all_user_moviedata)
-            cur_recommand = pre_recommand + 1
+            cur_recommand = len(all_user_moviedata)
             #평균 별점 변경
             for user_moviedata in all_user_moviedata :
                 totalsum += user_moviedata['user_star']
-            avg_star = (totalsum + int(star_receive)) / cur_recommand  # 기존 데이터들의 별점 합 에다가 현재 추가 하려는 데이터의 별점 추가 후 나누기
+            avg_star_string = "{:.1f}".format(totalsum / cur_recommand)  # 기존 데이터들의 별점 합 에다가 현재 추가 하려는 데이터의 별점 추가 후 나누기
+            # print("avg_star_string",avg_star_string) # round 처리 해주기
             db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_recommand': cur_recommand}})
-            db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_avg_star': avg_star}})
+            db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_avg_star': float(avg_star_string)}})
         
         elif result is None: # 영화 데이터 X
             #먼저 영화 전체 데이터 읽어옴
