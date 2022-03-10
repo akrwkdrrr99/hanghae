@@ -100,7 +100,7 @@
     </div>
 
 
-    <!-- 회원탈퇴 팝업창 -->
+    <!-- // 회원탈퇴 팝업창 -->
 
     <div class="updateModal modal" tabindex="-1">
         <div class="modal-dialog">
@@ -190,7 +190,7 @@
                 url: '/boardGet',
                 data: {},
                 success: function (response) {
-                    console.log(response, '게시글 데이터 찾자 !')
+                    // console.log(response, '게시글 데이터 찾기')
 
                     let rows = response['myboard']
                     for (let i = 0; rows.length; i++) {
@@ -278,7 +278,6 @@
 
         function user_delete() {
             let userId = $('#user').val()
-
             $.ajax({
                 type: 'POST',
                 url: '/userDelete',
@@ -288,18 +287,9 @@
                     window.location.href = '/'
                 }
             });
+            removeCookie()
         }
 
-
-        //           $.ajax({
-        //               type: 'POST',
-        //               url: '/mypageInfo',
-        //               data: {memberName_give: name, memberPhone_give: phone, memberEmail_give: email},
-        //               success: function (response) {
-        //                   alert(response['msg'])
-        //                   window.location.reload();
-        //               }
-        //           });
 
 
         function clickTit(e) {
@@ -321,6 +311,10 @@
 
             })
         }
+
+        function removeCookie() {
+            $.removeCookie('mytoken', {path: '/'});
+         }
 
 
 

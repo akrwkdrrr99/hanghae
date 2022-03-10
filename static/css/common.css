@@ -287,23 +287,28 @@ header .menu_bt.on ul li:nth-child(3){transform: translateY(-4px) rotate( -45deg
 /* 오른쪽 게시글 영역 */
 .rightBox {
     padding: 0 20px 0 50px;
+    width:calc(100% - 30px);
 }
 .mypageInner .rightBox .tit{
-    width:calc(100% - 30px);
+
+
 }
 
 .mypageInner .rightBox  .col {
     padding: 0 30px 0 0;
     cursor: pointer;
+    /*width: 100%;*/
+    /*max-width: 215px;*/
 }
 .mypageInner .rightBox .col a{
     display: block;
     color:var(--color-white);
 }
 
-.mypageInner .rightBox  .card {
-    border: 0;
+.mypageInner .rightBox .card {
+    border:0;
 }
+
 
 .mypageInner .rightBox  .card-body {
     padding-left: 0;
@@ -431,7 +436,7 @@ body.setof {overflow: hidden; height: 100%;}
  .pop_inner .pop_up_box form .certificate_code button {display: block; width: 70px; line-height: 48px; background-color: #222; color: #fff;}
  .pop_inner .pop_up_box form .check {margin-top: 22px; text-align: center;}
  .pop_inner .pop_up_box form .check button {width: 120px; height: 48px; line-height: 46px; border: 1px solid #222;}
- 
+
 .board_html .title_h3{
   float: left;
   margin-top: 11px;

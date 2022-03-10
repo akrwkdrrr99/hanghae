@@ -220,6 +220,7 @@ def user_delete():
         myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
         # print(myinfo)
         myid = myinfo['userid']
+
         db.users.delete_one({'userid': myid})
 
         return jsonify({'msg': '회원 탈퇴 되었습니다. 감사합니다.'})
@@ -391,7 +392,8 @@ def api():
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60*60*24)
             }
             token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-            return jsonify({'code': 0, 'msg': '정상입니다.', 'token': list(token)})
+
+            return jsonify({'code': 0, 'msg': '정상입니다.', 'token': token})
 
         else:
             return jsonify({'code': -1, 'msg': 'id/pw가 일치하지 않습니다.'})
