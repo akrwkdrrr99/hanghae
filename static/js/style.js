@@ -86,17 +86,12 @@ $(function () {
     }
 });
 
-function posting() {
-    let user_ID = $('#user_ID').val()
+function posting(user_ID) {
     let url = $('#url').val()
     let star = $('#star').val()
     let comment = $('#comment').val()
 
-    if(user_ID == ""){
-        alert("ID를 입력해주세요")
-        return
-    }
-    else if(url == ""){
+    if(url == ""){
         alert("영화URL을 입력해주세요")
         return
     }
@@ -124,7 +119,8 @@ function posting() {
         data: {reqType : 'postMovieData',user_ID_give : user_ID ,url_give: url, star_give: star, comment_give:comment},
         success: function (response) {
             alert(response['msg'])
-            // window.location.reload()
+            window.location.reload()
+            // window.location.href = `/board`
         }
     });
 }
@@ -133,8 +129,8 @@ function enter_board_write() {
     window.location.href="/board_write"
 }
 
-function enter_board() {
-    window.location.href="/board"
+function enter_board(pagenum) {
+    window.location.href=`/board/${pagenum}`
 }
 
 function enter_board_detail(index) {

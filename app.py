@@ -77,6 +77,12 @@ def home():
 def login():
     return render_template('login.html')
 
+@app.route("/useridchk", methods=["GET"])
+def user_id_get():
+    users_list = list(db.users.find({}, {'_id': False}))
+    return jsonify({'users': users_list})
+
+
 # @app.route("/login/pwfind", methods=["GET"])
 # def login_pw_find():
 #     user_list = list(db.users.find({}, {'_id': False}))
@@ -95,77 +101,125 @@ def mypage():
     #영화 데이터베이스 클라이언트로 내려주기
 @app.route("/boardGet", methods=["GET"])
 def board_get():
-    myboard = list(db.dbmoviedata.find({}, {'_id': False}))
-    return jsonify({'myboard': myboard})
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
+        myId = payload['id'] # 내 아이디 가져오기
+
+        myboard = list(db.dbuser_moviedata.find({'user_ID': myId}, {'_id': False})) # 내 아이디와 작성자가 같은 영화데이터 가져오기
+        # user_moviedata(알수없음) dbmoviedata(영화갯수 데이터) dbuser_moviedata(전체 영화데이터) movie_arrindex
+
+        moviechk = list(db.dbmoviedata.find({}, {'_id': False}))
+
+        for moviechks in moviechk:
+            arrchk = print(moviechks['movie_arrindex'])
+
+
+
+        return jsonify({'myboard': myboard})
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return redirect(url_for('home'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('home'))
+
+
+
 
     #회원 정보 데이터베이스 클라이언트로 내려주기
 @app.route("/memberRead", methods=["GET"])
 def member_read():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # print(payload)
+
+        myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        # print(myinfo)
+        return jsonify({'myinfo': myinfo})
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return redirect(url_for('home'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('home'))
+
+
     memberread = list(db.users.find({}, {'_id': False}))
     return jsonify({'memberread': memberread})
+
 
     # 개인정보 수정을 위한 로그인한 본인의 정보 데이터베이스 확인 및 수정
 @app.route("/mypageInfo", methods=["POST"])
 def user_update():
-    # token_receive = request.cookies.get('mytoken')
-    #
-    # # try / catch 문?
-    # # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-    #
-    # try:
-    #     # token을 시크릿키로 디코딩합니다.
-    #     # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
-    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    #     print(payload)
-    #
-    #     # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-    #     # 여기에선 그 예로 닉네임을 보내주겠습니다.
-    #     userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-    #     return jsonify({'result': 'success', 'nickname': userinfo['nick']})
-    # except jwt.ExpiredSignatureError:
-    #     # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-    #     return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
-    # except jwt.exceptions.DecodeError:
-    #     return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
-
     # 개인정보 수정 요청온 값.
-    # memberId_receive = request.form['memberId_give']
     memberName_receive = request.form['memberName_give']
     memberPhone_receive = request.form['memberPhone_give']
     memberEmail_receive = request.form['memberEmail_give']
+    print(memberEmail_receive, memberPhone_receive, memberName_receive)
 
-    # 내 개인정보 찾아서 수정하기
-    db.users.update_one({'name': ''}, {'$set': {'username': memberName_receive}})
-    db.users.update_one({'name': ''}, {'$set': {'userphone': memberPhone_receive}})
-    db.users.update_one({'name': ''}, {'$set': {'useremail': memberEmail_receive}})
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
 
+        myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        print(myinfo)
+        myname = myinfo['username']     # 나의 이름
+        myphone = myinfo['userphone']   # 나의 전화번호
+        myemail = myinfo['useremail']   # 나의 이메일
+        print(myname, myphone, myemail, '나의 정보들')
+
+
+        # 내 개인정보 찾아서 수정하기
+        if (myname == "") is not None:
+            db.users.update_one({'username': myname}, {'$set': {'username': memberName_receive}})
+        if (myphone == "") is not None:
+            db.users.update_one({'userphone': myphone}, {'$set': {'userphone': memberPhone_receive}})
+        if (myphone == "") is not None:
+            db.users.update_one({'useremail': myemail}, {'$set': {'useremail': memberEmail_receive}})
+
+        myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        print(myinfo)
+        return jsonify({'msg': '수정 완료 !'})
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return redirect(url_for('home'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('home'))
     return jsonify({'msg': '수정 완료 !'})
 
 
 @app.route("/userDelete", methods=["POST"])
 def user_delete():
+    memberName_receive = request.form['userId_give']
+    # print(memberName_receive, ' << 받아온 아이디값')
     token_receive = request.cookies.get('mytoken')
-
-    # try / catch 문?
-    # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-
     try:
-        # token을 시크릿키로 디코딩합니다.
-        # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
+        # print(payload)
 
-        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-        # 여기에선 그 예로 닉네임을 보내주겠습니다.
-        userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-        return jsonify({'result': 'success', 'nickname': userinfo['nick']})
+        myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
+        # print(myinfo)
+        myid = myinfo['userid']
+        db.users.delete_one({'userid': myid})
+
+        return jsonify({'msg': '회원 탈퇴 되었습니다. 감사합니다.'})
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
+        return redirect(url_for('home'))
     except jwt.exceptions.DecodeError:
-        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+        return redirect(url_for('home'))
 
-    return jsonify({'msg': '회원탈퇴 되었습니다. 감사합니다.'})
+@app.route("/titChk", methods=["POST"])
+def user_movie_title():
+    title_receive = request.form['title_give']
+    print(title_receive)
+    userMovieTit = list(db.dbmoviedata.find({'movie_title': title_receive}, {'_id': False}))
+    print(userMovieTit)
+
+    return jsonify({'arrIndexChk': userMovieTit})
+
 
 @app.route('/signup')
 def signup():
@@ -175,10 +229,50 @@ def signup():
 def memup():
     return render_template('memaree.html')
 
-@app.route('/board')
-def board():
-    all_movies = list(db.dbmoviedata.find({}, {'_id': False}))
-    return render_template('board.html', all_movies = all_movies)
+def pagenation(db_collection,page_size, page_num):
+    """returns a set of documents belonging to page number `page_num`
+    where size of each page is `page_size`.
+    """
+    # Calculate number of documents to skip
+    skips = page_size * (page_num - 1)
+
+    # Skip and limit
+    answer_list = list(db[db_collection].find({}, {'_id': False}).skip(skips).limit(page_size))
+
+    # Return documents
+    return answer_list
+
+
+PAGE_SIZE_NUM = 10 # 1페이지당 게시글 수
+MAX_PAGE_NUM = 10 # 몇 페이지 까지 만들 수 있는지
+
+@app.route('/board/<cur_page_num>')
+def board(cur_page_num):
+# @app.route('/board')
+# def board():
+    total_movie_num = len(list(db['dbmoviedata'].find({}, {'_id': False})))
+
+    # PAGE_SIZE_NUM = 10 # 1페이지당 게시글 수
+    # MAX_PAGE_NUM = 10 # 몇 페이지 까지 만들 수 있는지
+    PAGE_NUM = int(cur_page_num)
+
+    pagenation_arr = [1]
+    for i in range(1, MAX_PAGE_NUM+1) :
+        if(total_movie_num / PAGE_SIZE_NUM > i):
+            pagenation_arr.append(i+1)
+
+    pagenation_arr_max = max(pagenation_arr)
+    pagenation_arr_min = min(pagenation_arr)
+
+    if (PAGE_NUM > ((total_movie_num / PAGE_SIZE_NUM)+1)) : # 현재 표시되는 최대 페이지 수보다 큰 페이지 수에 접근하면 표시되는 최대 페이지 수로 return
+        jinja2_cur_page_num = pagenation_arr_max
+
+    else :
+        jinja2_cur_page_num = PAGE_NUM
+    
+    all_movies = pagenation('dbmoviedata',PAGE_SIZE_NUM,jinja2_cur_page_num)
+
+    return render_template('board.html', all_movies = all_movies , pagenation_arr = pagenation_arr  , cur_page_num = jinja2_cur_page_num , pagenation_arr_max = pagenation_arr_max, pagenation_arr_min = pagenation_arr_min)
 
 @app.route('/board/<condition>/<serch_text>/<flag>')
 def board_serch(condition, serch_text, flag):
@@ -218,10 +312,8 @@ def board_write():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
-
         userinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
-        return render_template('board_write.html')
+        return render_template('board_write.html',userid = userinfo['userid'])
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
         return redirect(url_for('login'))
@@ -234,15 +326,23 @@ def board_detail(keyword):
     userdatas = list(db.dbuser_moviedata.find({'movie_title': moviedata['movie_title']}, {'_id': False})) #get유저 정보
     all_movies = list(db.dbmoviedata.find({}, {'_id': False}))
     #글 번호
-    total_movie = len(all_movies)
+    total_movie_num = len(all_movies)
+    cur_arrinex_num = moviedata['movie_arrindex']
+
+    #넘어갈 목록 번호
+    if(((cur_arrinex_num / PAGE_SIZE_NUM)+1) % 1 != 0) :
+        goto_list_num = int((cur_arrinex_num / PAGE_SIZE_NUM)+1)
+    else :
+        goto_list_num = int((cur_arrinex_num / PAGE_SIZE_NUM))
+
     if(moviedata['movie_arrindex'] > 1) :
         pre_post = moviedata['movie_arrindex'] - 1
     elif(moviedata['movie_arrindex'] == 1) :
         pre_post = -1
 
-    if(moviedata['movie_arrindex'] < total_movie) :
+    if(moviedata['movie_arrindex'] < total_movie_num) :
         next_post = moviedata['movie_arrindex'] + 1
-    elif(moviedata['movie_arrindex'] == total_movie) :
+    elif(moviedata['movie_arrindex'] == total_movie_num) :
         next_post = -2
 
     return render_template('board_detail.html', movie_title=moviedata['movie_title'], movie_director=moviedata['movie_director'],
@@ -254,7 +354,8 @@ def board_detail(keyword):
                            movie_actor = moviedata['movie_actor'],
                            pre_post  = pre_post,
                            next_post = next_post,
-                           userdatas = userdatas
+                           userdatas = userdatas,
+                           goto_list_num = goto_list_num,
                            )
 
 @app.route('/api', methods=["POST"])
@@ -309,14 +410,16 @@ def api():
         soup = BeautifulSoup(data.text, 'html.parser')
 
         title = soup.select_one('meta[property="og:title"]')['content']
+        image = soup.select_one('meta[property="og:image"]')['content']
 
         user_moviedata = {
             'movie_title': title,
+            'movie_img': image,
             'user_ID' : user_ID,
             'user_star' : int(star_receive),
             'user_comment': comment_receive,
         }
-        print(user_moviedata)
+        # print(user_moviedata)
         db.dbuser_moviedata.insert_one(user_moviedata)
 
         
@@ -334,7 +437,6 @@ def api():
             avg_star = (totalsum + int(star_receive)) / cur_recommand  # 기존 데이터들의 별점 합 에다가 현재 추가 하려는 데이터의 별점 추가 후 나누기
             db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_recommand': cur_recommand}})
             db.dbmoviedata.update_one({'movie_title': title}, {'$set': {'movie_avg_star': avg_star}})
-            return jsonify({'code': 10, 'msg': '이미 존재합니다.'})
         
         elif result is None: # 영화 데이터 X
             #먼저 영화 전체 데이터 읽어옴
@@ -346,8 +448,7 @@ def api():
             recommand = 1 #첫 등록이므로 추천 수는 무조건 1
             #평균 별점
             avg_star = int(star_receive) #첫 등록이므로 평균 별점은 무조건 현재 별점
-            #영화 정보 크롤링
-            image = soup.select_one('meta[property="og:image"]')['content']
+            #영화 정보 크롤링 (img는 위에서 이미 처리함)
             desc = soup.select_one('meta[property="og:description"]')['content']
             releaseDates = soup.select(
                 'div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(4) > a')
@@ -379,39 +480,10 @@ def api():
             }
             db.dbmoviedata.insert_one(moviedata)
 
-            return jsonify({'code': 10, 'msg': '등록이 완료되었습니다.'})
+        return jsonify({'code': 10, 'msg': '등록되었습니다.'})
 
     else:
         return jsonify({'code': -99, 'msg': '정의되지 않은 요청코드'})
-
-
-
-# [유저 정보 확인 API]
-# 로그인된 유저만 call 할 수 있는 API입니다.
-# 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
-# (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route('/api/nick', methods=['GET'])
-def api_valid():
-    token_receive = request.cookies.get('mytoken')
-
-    # try / catch 문?
-    # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-
-    try:
-        # token을 시크릿키로 디코딩합니다.
-        # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
-
-        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-        # 여기에선 그 예로 닉네임을 보내주겠습니다.
-        userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-        return jsonify({'result': 'success', 'nickname': userinfo['nick']})
-    except jwt.ExpiredSignatureError:
-        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
-    except jwt.exceptions.DecodeError:
-        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
 
 
