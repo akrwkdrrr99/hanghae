@@ -129,8 +129,8 @@ function enter_board_write() {
     window.location.href="/board_write"
 }
 
-function enter_board() {
-    window.location.href="/board"
+function enter_board(pagenum) {
+    window.location.href=`/board/${pagenum}`
 }
 
 function enter_board_detail(index) {

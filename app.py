@@ -174,10 +174,50 @@ def signup():
 def memup():
     return render_template('memaree.html')
 
-@app.route('/board')
-def board():
-    all_movies = list(db.dbmoviedata.find({}, {'_id': False}))
-    return render_template('board.html', all_movies = all_movies)
+def pagenation(db_collection,page_size, page_num):
+    """returns a set of documents belonging to page number `page_num`
+    where size of each page is `page_size`.
+    """
+    # Calculate number of documents to skip
+    skips = page_size * (page_num - 1)
+
+    # Skip and limit
+    answer_list = list(db[db_collection].find({}, {'_id': False}).skip(skips).limit(page_size))
+
+    # Return documents
+    return answer_list
+
+
+PAGE_SIZE_NUM = 10 # 1페이지당 게시글 수
+MAX_PAGE_NUM = 10 # 몇 페이지 까지 만들 수 있는지
+
+@app.route('/board/<cur_page_num>')
+def board(cur_page_num):
+# @app.route('/board')
+# def board():
+    total_movie_num = len(list(db['dbmoviedata'].find({}, {'_id': False})))
+
+    # PAGE_SIZE_NUM = 10 # 1페이지당 게시글 수
+    # MAX_PAGE_NUM = 10 # 몇 페이지 까지 만들 수 있는지
+    PAGE_NUM = int(cur_page_num)
+
+    pagenation_arr = [1]
+    for i in range(1, MAX_PAGE_NUM+1) :
+        if(total_movie_num / PAGE_SIZE_NUM > i):
+            pagenation_arr.append(i+1)
+
+    pagenation_arr_max = max(pagenation_arr)
+    pagenation_arr_min = min(pagenation_arr)
+
+    if (PAGE_NUM > ((total_movie_num / PAGE_SIZE_NUM)+1)) : # 현재 표시되는 최대 페이지 수보다 큰 페이지 수에 접근하면 표시되는 최대 페이지 수로 return
+        jinja2_cur_page_num = pagenation_arr_max
+
+    else :
+        jinja2_cur_page_num = PAGE_NUM
+    
+    all_movies = pagenation('dbmoviedata',PAGE_SIZE_NUM,jinja2_cur_page_num)
+
+    return render_template('board.html', all_movies = all_movies , pagenation_arr = pagenation_arr  , cur_page_num = jinja2_cur_page_num , pagenation_arr_max = pagenation_arr_max, pagenation_arr_min = pagenation_arr_min)
 
 @app.route('/board/<condition>/<serch_text>/<flag>')
 def board_serch(condition, serch_text, flag):
@@ -231,15 +271,23 @@ def board_detail(keyword):
     userdatas = list(db.dbuser_moviedata.find({'movie_title': moviedata['movie_title']}, {'_id': False})) #get유저 정보
     all_movies = list(db.dbmoviedata.find({}, {'_id': False}))
     #글 번호
-    total_movie = len(all_movies)
+    total_movie_num = len(all_movies)
+    cur_arrinex_num = moviedata['movie_arrindex']
+
+    #넘어갈 목록 번호
+    if(((cur_arrinex_num / PAGE_SIZE_NUM)+1) % 1 != 0) :
+        goto_list_num = int((cur_arrinex_num / PAGE_SIZE_NUM)+1)
+    else :
+        goto_list_num = int((cur_arrinex_num / PAGE_SIZE_NUM))
+
     if(moviedata['movie_arrindex'] > 1) :
         pre_post = moviedata['movie_arrindex'] - 1
     elif(moviedata['movie_arrindex'] == 1) :
         pre_post = -1
 
-    if(moviedata['movie_arrindex'] < total_movie) :
+    if(moviedata['movie_arrindex'] < total_movie_num) :
         next_post = moviedata['movie_arrindex'] + 1
-    elif(moviedata['movie_arrindex'] == total_movie) :
+    elif(moviedata['movie_arrindex'] == total_movie_num) :
         next_post = -2
 
     return render_template('board_detail.html', movie_title=moviedata['movie_title'], movie_director=moviedata['movie_director'],
@@ -251,7 +299,8 @@ def board_detail(keyword):
                            movie_actor = moviedata['movie_actor'],
                            pre_post  = pre_post,
                            next_post = next_post,
-                           userdatas = userdatas
+                           userdatas = userdatas,
+                           goto_list_num = goto_list_num,
                            )
 
 @app.route('/api', methods=["POST"])
@@ -315,7 +364,7 @@ def api():
             'user_star' : int(star_receive),
             'user_comment': comment_receive,
         }
-        print(user_moviedata)
+        # print(user_moviedata)
         db.dbuser_moviedata.insert_one(user_moviedata)
 
         
