@@ -81,8 +81,30 @@ def mypage():
     #영화 데이터베이스 클라이언트로 내려주기
 @app.route("/boardGet", methods=["GET"])
 def board_get():
-    myboard = list(db.dbmoviedata.find({}, {'_id': False}))
-    return jsonify({'myboard': myboard})
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        print(payload)
+        myId = payload['id'] # 내 아이디 가져오기
+
+        myboard = list(db.dbuser_moviedata.find({'user_ID': myId}, {'_id': False})) # 내 아이디와 작성자가 같은 영화데이터 가져오기
+        # user_moviedata(알수없음) dbmoviedata(영화갯수 데이터) dbuser_moviedata(전체 영화데이터) movie_arrindex
+
+        moviechk = list(db.dbmoviedata.find({}, {'_id': False}))
+
+        for moviechks in moviechk:
+            arrchk = print(moviechks['movie_arrindex'])
+
+
+
+        return jsonify({'myboard': myboard})
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return redirect(url_for('home'))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for('home'))
+
+
 
 
     #회원 정보 데이터베이스 클라이언트로 내려주기
@@ -123,14 +145,19 @@ def user_update():
 
         myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
         print(myinfo)
-        myname = myinfo['username']
-        myphone = myinfo['userphone']
-        myemail = myinfo['useremail']
+        myname = myinfo['username']     # 나의 이름
+        myphone = myinfo['userphone']   # 나의 전화번호
+        myemail = myinfo['useremail']   # 나의 이메일
+        print(myname, myphone, myemail, '나의 정보들')
+
 
         # 내 개인정보 찾아서 수정하기
-        db.users.update_one({'username': myname}, {'$set': {'username': memberName_receive}})
-        db.users.update_one({'userphone': myphone}, {'$set': {'userphone': memberPhone_receive}})
-        db.users.update_one({'useremail': myemail}, {'$set': {'useremail': memberEmail_receive}})
+        if (myname == "") is not None:
+            db.users.update_one({'username': myname}, {'$set': {'username': memberName_receive}})
+        if (myphone == "") is not None:
+            db.users.update_one({'userphone': myphone}, {'$set': {'userphone': memberPhone_receive}})
+        if (myphone == "") is not None:
+            db.users.update_one({'useremail': myemail}, {'$set': {'useremail': memberEmail_receive}})
 
         myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
         print(myinfo)
@@ -146,14 +173,14 @@ def user_update():
 @app.route("/userDelete", methods=["POST"])
 def user_delete():
     memberName_receive = request.form['userId_give']
-    print(memberName_receive, ' << 받아온 아이디값')
+    # print(memberName_receive, ' << 받아온 아이디값')
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
+        # print(payload)
 
         myinfo = db.users.find_one({'userid': payload['id']}, {'_id': 0})
-        print(myinfo)
+        # print(myinfo)
         myid = myinfo['userid']
         db.users.delete_one({'userid': myid})
 
@@ -164,6 +191,14 @@ def user_delete():
     except jwt.exceptions.DecodeError:
         return redirect(url_for('home'))
 
+@app.route("/titChk", methods=["POST"])
+def user_movie_title():
+    title_receive = request.form['title_give']
+    print(title_receive)
+    userMovieTit = list(db.dbmoviedata.find({'movie_title': title_receive}, {'_id': False}))
+    print(userMovieTit)
+
+    return jsonify({'arrIndexChk': userMovieTit})
 
 
 @app.route('/signup')
@@ -429,35 +464,6 @@ def api():
 
     else:
         return jsonify({'code': -99, 'msg': '정의되지 않은 요청코드'})
-
-
-
-# [유저 정보 확인 API]
-# 로그인된 유저만 call 할 수 있는 API입니다.
-# 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
-# (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route('/api/nick', methods=['GET'])
-def api_valid():
-    token_receive = request.cookies.get('mytoken')
-
-    # try / catch 문?
-    # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-
-    try:
-        # token을 시크릿키로 디코딩합니다.
-        # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
-
-        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-        # 여기에선 그 예로 닉네임을 보내주겠습니다.
-        userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
-        return jsonify({'result': 'success', 'nickname': userinfo['nick']})
-    except jwt.ExpiredSignatureError:
-        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
-    except jwt.exceptions.DecodeError:
-        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
 
 
