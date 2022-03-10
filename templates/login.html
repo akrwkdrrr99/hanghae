@@ -61,10 +61,10 @@
             <form class="find_id_form" name="find_id_form" method="post" action="">
                   <ul class="top">
                     <li>
-                        <input type="text" name="user_name" placeholder="Name">
+                        <input type="text" name="user_name" placeholder="Name" id="f_id_data1">
                     </li>
                     <li class="e-mail">
-                          <input type="text" name="user_mail" placeholder="E-mail">
+                          <input type="text" name="user_mail" placeholder="E-mail" id="f_id_data2">
                     </li>
                   </ul>
                   <div class="certificate_code">
@@ -72,7 +72,7 @@
                         <button type="button">확인</button>
                   </div>
                     <div class="mid check">
-                        <button type="button" onclick="form_check();">확인</button>
+                        <button type="button" onclick="form_check1();">확인</button>
                     </div>
               </form>
         </div>
@@ -80,13 +80,13 @@
             <form class="find_pw_form" name="find_pw_form" method="post" action="">
                   <ul class="top">
                     <li>
-                        <input type="text" name="user_name" placeholder="Name">
+                        <input type="text" name="user_name" placeholder="Name" id="f_pw_data1">
                     </li>
                     <li>
-                        <input type="text" name="user_id" placeholder="ID">
+                        <input type="text" name="user_id" placeholder="ID"  id="f_pw_data2">
                     </li>
                     <li class="e-mail">
-                          <input type="text" name="user_mail" placeholder="E-mail">
+                          <input type="text" name="user_mail" placeholder="E-mail"  id="f_pw_data3">
                     </li>
                   </ul>
                   <div class="certificate_code">
@@ -94,11 +94,42 @@
                         <button type="button">확인</button>
                   </div>
                     <div class="mid check">
-                        <button type="button" onclick="form_check();">확인</button>
+                        <button type="button" onclick="form_check2();">확인</button>
                     </div>
               </form>
             </div>
       </div>
     </div>
+    <script>
+        // 서버에 요청할 작업을 상수로 정의해서 상수값과 같이 요청합니다.
+        function form_check1(){
+            $.ajax({
+                type: "POST",
+                url: "/login/idfind",
+                data: {
+                    userName: $('#f_id_data1').val(),
+                    userEmail: $('#f_id_data2').val()
+                },
+                success: function (response) {
+                    alert(response['msg']);
+                }
+            })
+        }
+
+        function form_check2(){
+            $.ajax({
+                type: "POST",
+                url: "/login/pwfind",
+                data: {
+                    userName: $('#f_pw_data1').val(),
+                    userId: $('#f_pw_data2').val(),
+                    userEmail: $('#f_pw_data3').val()
+                },
+                success: function (response) {
+                    alert(response['msg']);
+                }
+            })
+        }
+    </script>
 </div>
 {% endblock %}
