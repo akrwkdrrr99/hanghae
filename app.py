@@ -467,9 +467,13 @@ def api():
             desc = soup.select_one('meta[property="og:description"]')['content']
             releaseDates = soup.select(
                 'div.article > div.mv_info_area > div.mv_info > dl > dd:nth-child(2) > p > span:nth-child(4) > a')
-            openYear = releaseDates[0].text
-            openMonthDay = releaseDates[1].text
-            releaseDate = openYear + openMonthDay
+
+            if (len(releaseDates) == 0):
+                releaseDate = ""
+            else:
+                openYear = releaseDates[0].text
+                openMonthDay = releaseDates[1].text
+                releaseDate = openYear + openMonthDay
 
             actors = soup.select(
                 'div.article > div.section_group.section_group_frst > div:nth-child(2) > div > ul')
